@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oscars Broadcast Leaderboard</title>
+  <title>Oscars Broadcast League Dashboard</title>
 
   <style>
     :root {
@@ -22,7 +22,7 @@
     }
 
     * {
-      box-sizing: border-box
+      box-sizing: border-box;
     }
 
     body {
@@ -31,6 +31,7 @@
       font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
       background: #ede8d5;
       color: var(--cream);
+      zoom: .78;
     }
 
     .wrap {
@@ -40,7 +41,7 @@
 
     /* ===== LEADER ===== */
     .leader-showcase {
-      margin-bottom: 24px
+      margin-bottom: 24px;
     }
 
     .leader-card {
@@ -50,23 +51,20 @@
       box-shadow: 0 6px 28px rgba(0,0,0,0.15);
       padding: 26px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       gap: 28px;
     }
 
-    /* Left half: leader info */
     .leader-left {
       display: flex;
       align-items: center;
       gap: 28px;
-      flex: 1;
-      min-width: 0;
+      flex: 1; min-width: 0; justify-content:center;
     }
 
     .leader-info {
-      flex: 1;
-      min-width: 0;
+      flex: 1; min-width: 0; justify-content:center;
     }
 
     .leader-name-row {
@@ -83,7 +81,7 @@
     }
 
     .leader-image.show {
-      display: block
+      display: block;
     }
 
     .leader-name {
@@ -123,7 +121,6 @@
       width: 80px;
     }
 
-    /* Right half: vertical ticker */
     .ticker-panel {
       width: 460px;
       flex-shrink: 0;
@@ -153,7 +150,6 @@
       position: relative;
     }
 
-    /* Fade edges top and bottom */
     .ticker-vert-wrap::before,
     .ticker-vert-wrap::after {
       content: '';
@@ -208,22 +204,24 @@
       100% { transform: translateY(-50%); }
     }
 
-    /* ===== TABLE ===== */
+    /* ===== CARDS / TABLES ===== */
     .board-card {
       border-radius: var(--radius);
       border: 2px solid var(--border);
       background: #fffef8;
       box-shadow: var(--shadow);
       overflow: hidden;
+      margin-bottom: 24px;
     }
 
     .board-head {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       padding: 18px 20px;
       border-bottom: 2px solid var(--border);
       background: #fff8e1;
+      gap: 20px;
     }
 
     .board-title h2 {
@@ -239,12 +237,13 @@
 
     .status {
       color: #5a4400;
-      font-size: .85rem
+      font-size: .85rem;
+      text-align: right;
     }
 
     table {
       width: 100%;
-      border-collapse: collapse
+      border-collapse: collapse;
     }
 
     thead th {
@@ -259,7 +258,7 @@
     }
 
     .sortable {
-      cursor: pointer
+      cursor: pointer;
     }
 
     .sortable.active {
@@ -267,11 +266,11 @@
     }
 
     .sortable.active.asc::after {
-      content: ' ▲'
+      content: ' ▲';
     }
 
     .sortable.active.desc::after {
-      content: ' ▼'
+      content: ' ▼';
     }
 
     tbody td {
@@ -308,16 +307,7 @@
       color: #111111;
     }
 
-    .player-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--gold);
-      display: none;
-    }
-
-    .points,
-    .movement {
+    .points {
       font-weight: 700;
       font-size: 40px;
       color: #111111;
@@ -330,8 +320,89 @@
       background: #fdf5e0;
     }
 
-    body {
-      zoom: .78
+    /* ===== TABS ===== */
+    .tabs-card {
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      background: #fffef8;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding: 14px;
+      background: #fff8e1;
+      border-bottom: 2px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .tab-button {
+      border: 2px solid rgba(122, 92, 0, 0.35);
+      background: #fffef8;
+      color: #5a4400;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .tab-button.active {
+      background: #fdf5cc;
+      border-color: var(--gold);
+      color: #1a1200;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .mini-note {
+      padding: 12px 20px;
+      color: #5a4400;
+      background: #fdf5e0;
+      border-bottom: 1px solid rgba(100, 75, 0, 0.18);
+      font-size: .9rem;
+    }
+
+    .simple-table td,
+    .simple-table th {
+      font-size: 18px;
+    }
+
+    .chart-wrap {
+      padding: 24px;
+    }
+
+    canvas {
+      width: 100% !important;
+      max-height: 520px;
+    }
+
+    @media (max-width: 900px) {
+      .leader-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .ticker-panel {
+        width: 100%;
+        border-left: 0;
+        border-top: 2px solid var(--gold);
+        padding-left: 0;
+        padding-top: 18px;
+      }
+
+      .player-cell,
+      .points {
+        font-size: 28px;
+      }
     }
   </style>
 </head>
@@ -345,7 +416,7 @@
       <div class="board-head">
         <div class="board-title">
           <h2>Full Standings</h2>
-          <span>Click a column header to change the leaderboard</span>
+          <span>Season points only</span>
         </div>
         <div class="status" id="statusText">Loading leaderboard…</div>
       </div>
@@ -355,13 +426,12 @@
           <tr>
             <th>Rank</th>
             <th>Player</th>
-            <th id="sortNight" class="sortable">Points for the Night</th>
-            <th id="sortSeason" class="sortable">Season Points</th>
+            <th id="sortSeason" class="sortable active desc">Season Points</th>
           </tr>
         </thead>
         <tbody id="leaderboardBody">
           <tr>
-            <td colspan="4">Waiting for data…</td>
+            <td colspan="3">Waiting for data…</td>
           </tr>
         </tbody>
       </table>
@@ -369,39 +439,121 @@
       <div class="last-updated" id="lastUpdated">Last updated: --</div>
     </section>
 
+    <section class="tabs-card">
+      <div class="tabs" role="tablist" aria-label="Oscar dashboard tabs">
+        <button class="tab-button active" data-tab="selections" type="button">User Movie Selections</button>
+        <button class="tab-button" data-tab="movies" type="button">Oscar Potential Movies</button>
+        <button class="tab-button" data-tab="swiftOdds" type="button">Taylor Swift Oscar Odds</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-selections">
+        <div class="mini-note">
+          Pulls from the sheet tab/gid set in <strong>CONFIG.selectionsGid</strong>. Suggested columns: Player, Movie, Category, Pick Type.
+        </div>
+        <table class="simple-table">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Movie</th>
+              <th>Category</th>
+              <th>Pick Type</th>
+            </tr>
+          </thead>
+          <tbody id="selectionsBody">
+            <tr><td colspan="4">Loading selections…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tab-panel" id="tab-movies">
+        <div class="mini-note">
+          Pulls from the sheet tab/gid set in <strong>CONFIG.moviesGid</strong>. Suggested columns: Movie, Studio, Release Date, Categories, Notes.
+        </div>
+        <table class="simple-table">
+          <thead>
+            <tr>
+              <th>Movie</th>
+              <th>Studio</th>
+              <th>Release Date</th>
+              <th>Categories</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="moviesBody">
+            <tr><td colspan="5">Loading potential movies…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tab-panel" id="tab-swiftOdds">
+        <div class="mini-note">
+          Edit <strong>CONFIG.taylorSwiftOdds</strong> below, or connect this later to another Google Sheet tab if you want the graph to auto-update.
+        </div>
+        <div class="chart-wrap">
+          <canvas id="swiftOddsChart" aria-label="Taylor Swift Oscar odds through the year"></canvas>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
   <script>
     const CONFIG = {
       sheetId: '1Vm3mf2CBTucA6ejKzhd2irPa8nU08HPgAQqg6E7KPdw',
-      gid: '0',
+
+      // Main standings tab
+      standingsGid: '0',
+
+      // Replace these with the gid values for your extra Google Sheet tabs.
+      // Tip: open the tab in Google Sheets and copy the number after gid= in the URL.
+      selectionsGid: 'PASTE_SELECTIONS_GID_HERE',
+      moviesGid: 'PASTE_MOVIES_GID_HERE',
+
       refreshMs: 60000,
       leaderImageUrl: 'PASTE_OPTIONAL_IMAGE_URL_HERE',
-        tickerItems: [
-        'Sup Actrs: Amy Madigan', 
+
+      tickerItems: [
+        'Sup Actrs: Amy Madigan',
         'An. Feat: KPop',
         'An. Shrt: Girl Who Cried Pearls',
         'Costume Design: Frankenstein',
-         'Makeup & Hairstyling: Frankenstein',
-          'Casting: One Battle After Another',
-          'Suporting Actor: Sean Penn',
-          'Live Act. Shrt: Tie',
-          'Adapted Screenplay: OBAA',
-          'Original Screenplay: Sinners',
-          'Production Design: Frankenstein'
-        
+        'Makeup & Hairstyling: Frankenstein',
+        'Casting: One Battle After Another',
+        'Supporting Actor: Sean Penn',
+        'Live Act. Shrt: Tie',
+        'Adapted Screenplay: OBAA',
+        'Original Screenplay: Sinners',
+        'Production Design: Frankenstein'
+      ],
+
+      // Placeholder odds data. Replace these with your real odds snapshots through the season.
+      // Value should be odds percentage from 0 to 100.
+      taylorSwiftOdds: [
+        { date: 'Jan', odds: 4 },
+        { date: 'Feb', odds: 6 },
+        { date: 'Mar', odds: 8 },
+        { date: 'Apr', odds: 12 },
+        { date: 'May', odds: 16 },
+        { date: 'Jun', odds: 22 },
+        { date: 'Jul', odds: 28 },
+        { date: 'Aug', odds: 34 },
+        { date: 'Sep', odds: 41 },
+        { date: 'Oct', odds: 48 },
+        { date: 'Nov', odds: 44 },
+        { date: 'Dec', odds: 39 }
       ]
     };
 
     const state = {
-      sortBy: 'night',
       sortDirection: 'desc',
-      rawData: []
+      rawData: [],
+      chart: null
     };
 
     function buildVerticalTicker() {
-      // Duplicate items so the scroll loops seamlessly
       const items = [...CONFIG.tickerItems, ...CONFIG.tickerItems];
       return items.map(item => `
         <div class="ticker-vert-item">
@@ -410,8 +562,8 @@
         </div>`).join('');
     }
 
-    function getCsvUrl() {
-      return `https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/export?format=csv&gid=${CONFIG.gid}`;
+    function getCsvUrl(gid) {
+      return `https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/export?format=csv&gid=${gid}`;
     }
 
     function parsePointsValue(value) {
@@ -422,32 +574,35 @@
       return Number.isFinite(parsed) ? parsed : 0;
     }
 
+    function getValue(row, names, fallback = '') {
+      for (const name of names) {
+        if (row[name] !== undefined && row[name] !== null && String(row[name]).trim() !== '') {
+          return String(row[name]).trim();
+        }
+      }
+      return fallback;
+    }
+
     function normalizeRow(row) {
       return {
-        player: String(row.Player || row.player || '').trim(),
-        nightPoints: parsePointsValue(row.NightPoints ?? row['Points for the Night'] ?? row.Points ?? row.points ?? 0),
-        seasonPoints: parsePointsValue(row.SeasonPoints ?? row['Season Points'] ?? row['Season Total'] ?? row.TotalPoints ?? row['Total Points'] ?? row.total ?? 0)
+        player: getValue(row, ['Player', 'player', 'Name', 'name']),
+        seasonPoints: parsePointsValue(row.SeasonPoints ?? row['Season Points'] ?? row['Season Total'] ?? row.TotalPoints ?? row['Total Points'] ?? row.total ?? row.Points ?? row.points ?? 0)
       };
     }
 
     function getSortedData(data) {
-      const key = state.sortBy === 'season' ? 'seasonPoints' : 'nightPoints';
       const dir = state.sortDirection === 'asc' ? 1 : -1;
       return [...data].sort((a, b) => {
-        const diff = (a[key] - b[key]) * dir;
+        const diff = (a.seasonPoints - b.seasonPoints) * dir;
         if (diff !== 0) return diff;
-        const fallback = (b.seasonPoints - a.seasonPoints) * dir;
-        if (fallback !== 0 && key !== 'seasonPoints') return fallback;
         return a.player.localeCompare(b.player);
       });
     }
 
-    function updateSortHeaders() {
-      const n = document.getElementById('sortNight');
+    function updateSortHeader() {
       const s = document.getElementById('sortSeason');
-      [n, s].forEach(el => el.classList.remove('active', 'asc', 'desc'));
-      const active = state.sortBy === 'season' ? s : n;
-      active.classList.add('active', state.sortDirection);
+      s.classList.remove('asc', 'desc');
+      s.classList.add(state.sortDirection);
     }
 
     function renderLeaderShowcase(data) {
@@ -457,90 +612,71 @@
         container.innerHTML = '';
         return;
       }
-      const primaryLabel = state.sortBy === 'season' ? 'Season Points' : 'Points for the Night';
-      const secondaryLabel = state.sortBy === 'season' ? 'Points for the Night' : 'Season Points';
-      const primary = state.sortBy === 'season' ? leader.seasonPoints : leader.nightPoints;
-      const secondary = state.sortBy === 'season' ? leader.nightPoints : leader.seasonPoints;
+
       const img = (CONFIG.leaderImageUrl && CONFIG.leaderImageUrl !== 'PASTE_OPTIONAL_IMAGE_URL_HERE')
         ? `<img class="leader-image show" src="${CONFIG.leaderImageUrl}" alt="Leader icon">`
         : '';
 
       container.innerHTML = `
         <div class="leader-card">
-
-          <!-- LEFT: statuette + info -->
           <div class="leader-left">
-            <div class="leader-rank">
-              <img src="data:image/jpeg;base64,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">
-            </div>
+            <div class="leader-rank">#1</div>
             <div class="leader-info">
-              <div class="leader-movement">Current Leader • Sorted by ${primaryLabel}</div>
+              <div class="leader-movement">Current Leader • Sorted by Season Points</div>
               <div class="leader-name-row">${img}<div class="leader-name">${leader.player}</div></div>
-              <div class="leader-points">${primary} ${primaryLabel}</div>
-              <div class="leader-movement">${secondaryLabel}: ${secondary}</div>
+              <div class="leader-points">${leader.seasonPoints} Season Points</div>
             </div>
           </div>
 
-          <!-- RIGHT: vertical scrolling ticker -->
-          <div class="ticker-panel">
-            <div class="ticker-panel-label">Oscar Winners</div>
-            <div class="ticker-vert-wrap">
-              <div class="ticker-vert-track" id="tickerVertTrack"></div>
-            </div>
-          </div>
+          </div></div>`;
 
-        </div>`;
-
-      // Populate the vertical ticker
-      document.getElementById('tickerVertTrack').innerHTML = buildVerticalTicker();
+      
     }
 
     function renderTable(data) {
       const tbody = document.getElementById('leaderboardBody');
       if (!data.length) {
-        tbody.innerHTML = '<tr><td colspan="4">No leaderboard rows found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3">No leaderboard rows found.</td></tr>';
         return;
       }
+
       tbody.innerHTML = data.map((p, i) => `
         <tr>
           <td><span class="rank-badge">${i + 1}</span></td>
-          <td><div class="player-cell"><span class="player-dot"></span>${p.player}</div></td>
-          <td class="points">${p.nightPoints}</td>
-          <td class="movement">${p.seasonPoints}</td>
+          <td><div class="player-cell">${p.player}</div></td>
+          <td class="points">${p.seasonPoints}</td>
         </tr>`).join('');
     }
 
     function renderAll() {
       const sorted = getSortedData(state.rawData);
-      updateSortHeaders();
+      updateSortHeader();
       renderLeaderShowcase(sorted);
       renderTable(sorted);
       document.getElementById('statusText').textContent =
-        `Showing ${state.rawData.length} players • sorted by ${state.sortBy === 'season' ? 'season points' : 'points for the night'}`;
+        `Showing ${state.rawData.length} players • sorted by season points`;
     }
 
-    function setSort(key) {
-      if (state.sortBy === key) {
-        state.sortDirection = state.sortDirection === 'desc' ? 'asc' : 'desc';
-      } else {
-        state.sortBy = key;
-        state.sortDirection = 'desc';
-      }
+    function setSort() {
+      state.sortDirection = state.sortDirection === 'desc' ? 'asc' : 'desc';
       renderAll();
     }
 
     function setupSorting() {
-      document.getElementById('sortNight').onclick = () => setSort('night');
-      document.getElementById('sortSeason').onclick = () => setSort('season');
+      document.getElementById('sortSeason').onclick = setSort;
+    }
+
+    async function fetchCsvRows(gid) {
+      const res = await fetch(getCsvUrl(gid), { cache: 'no-store' });
+      const csv = await res.text();
+      return Papa.parse(csv, { header: true, skipEmptyLines: true }).data;
     }
 
     async function loadLeaderboard() {
       if (!CONFIG.sheetId || CONFIG.sheetId === 'PASTE_YOUR_SHEET_ID_HERE') return;
       try {
-        const res = await fetch(getCsvUrl(), { cache: 'no-store' });
-        const csv = await res.text();
-        const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true });
-        state.rawData = parsed.data.map(normalizeRow).filter(r => r.player);
+        const rows = await fetchCsvRows(CONFIG.standingsGid);
+        state.rawData = rows.map(normalizeRow).filter(r => r.player);
         renderAll();
         document.getElementById('lastUpdated').textContent = `Last updated: ${new Date().toLocaleString()}`;
       } catch (error) {
@@ -549,8 +685,163 @@
       }
     }
 
+    async function loadSelections() {
+      const tbody = document.getElementById('selectionsBody');
+      if (!CONFIG.selectionsGid || CONFIG.selectionsGid.includes('PASTE_')) {
+        tbody.innerHTML = `
+          <tr>
+            <td>Bobby</td>
+            <td>Example Movie</td>
+            <td>Best Picture</td>
+            <td>First Choice</td>
+          </tr>
+          <tr>
+            <td>Player 2</td>
+            <td>Another Example</td>
+            <td>Best Actress</td>
+            <td>Second Choice</td>
+          </tr>`;
+        return;
+      }
+
+      try {
+        const rows = await fetchCsvRows(CONFIG.selectionsGid);
+        tbody.innerHTML = rows.map(row => `
+          <tr>
+            <td>${getValue(row, ['Player', 'player', 'Name'])}</td>
+            <td>${getValue(row, ['Movie', 'movie', 'Film', 'film'])}</td>
+            <td>${getValue(row, ['Category', 'category'])}</td>
+            <td>${getValue(row, ['Pick Type', 'PickType', 'Choice', 'choice', 'Selection Type'])}</td>
+          </tr>`).join('') || '<tr><td colspan="4">No selections found.</td></tr>';
+      } catch (error) {
+        console.error(error);
+        tbody.innerHTML = '<tr><td colspan="4">Could not load selections.</td></tr>';
+      }
+    }
+
+    async function loadMovies() {
+      const tbody = document.getElementById('moviesBody');
+      if (!CONFIG.moviesGid || CONFIG.moviesGid.includes('PASTE_')) {
+        tbody.innerHTML = `
+          <tr>
+            <td>One Battle After Another</td>
+            <td>Example Studio</td>
+            <td>Fall</td>
+            <td>Picture, Director, Screenplay</td>
+            <td>Placeholder row — replace with your sheet data.</td>
+          </tr>
+          <tr>
+            <td>Frankenstein</td>
+            <td>Example Studio</td>
+            <td>Fall</td>
+            <td>Production Design, Costume, Makeup</td>
+            <td>Placeholder row — replace with your sheet data.</td>
+          </tr>`;
+        return;
+      }
+
+      try {
+        const rows = await fetchCsvRows(CONFIG.moviesGid);
+        tbody.innerHTML = rows.map(row => `
+          <tr>
+            <td>${getValue(row, ['Movie', 'movie', 'Film', 'film'])}</td>
+            <td>${getValue(row, ['Studio', 'studio', 'Distributor'])}</td>
+            <td>${getValue(row, ['Release Date', 'ReleaseDate', 'Date'])}</td>
+            <td>${getValue(row, ['Categories', 'Category', 'Potential Categories'])}</td>
+            <td>${getValue(row, ['Notes', 'notes', 'Status'])}</td>
+          </tr>`).join('') || '<tr><td colspan="5">No potential movies found.</td></tr>';
+      } catch (error) {
+        console.error(error);
+        tbody.innerHTML = '<tr><td colspan="5">Could not load potential movies.</td></tr>';
+      }
+    }
+
+    function setupTabs() {
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+          button.classList.add('active');
+          document.getElementById(`tab-${button.dataset.tab}`).classList.add('active');
+
+          if (button.dataset.tab === 'swiftOdds') {
+            setTimeout(renderSwiftOddsChart, 0);
+          }
+        });
+      });
+    }
+
+    function renderSwiftOddsChart() {
+      const canvas = document.getElementById('swiftOddsChart');
+      if (!canvas || !window.Chart) return;
+
+      if (state.chart) {
+        state.chart.destroy();
+      }
+
+      state.chart = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: CONFIG.taylorSwiftOdds.map(point => point.date),
+          datasets: [{
+            label: 'Oscar odds %',
+            data: CONFIG.taylorSwiftOdds.map(point => point.odds),
+            tension: 0.35,
+            borderWidth: 4,
+            pointRadius: 5,
+            pointHoverRadius: 7
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true
+            },
+            title: {
+              display: true,
+              text: 'Taylor Swift Oscar Odds Through the Year',
+              font: {
+                size: 24,
+                weight: 'bold'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: context => `${context.parsed.y}% odds`
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                callback: value => `${value}%`
+              },
+              title: {
+                display: true,
+                text: 'Odds'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Month'
+              }
+            }
+          }
+        }
+      });
+    }
+
     setupSorting();
+    setupTabs();
     loadLeaderboard();
+    loadSelections();
+    loadMovies();
     setInterval(loadLeaderboard, CONFIG.refreshMs);
   </script>
 </body>
