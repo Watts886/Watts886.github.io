@@ -35,7 +35,7 @@
     <section class="score-strip" aria-label="League stats">
       <div><span id="totalPlayers">8</span><small>Players</small></div>
       <div><span id="totalFilms">24</span><small>Films Drafted</small></div>
-      <div><span id="awardsLeft">23</span><small>Oscar Categories</small></div>
+      <div><span id="awardsLeft">250</span><small>Days Till Oscars</small></div>
       <div><span id="leaderName">Bobby</span><small>Current Leader</small></div>
     </section>
 
@@ -43,7 +43,7 @@
       <div class="section-heading">
         <p class="eyebrow">Live Standings</p>
         <h2>Leaderboard</h2>
-        <p>Sort by season total or Oscar night points. Update the player data in <code>script.js</code> when scores change.</p>
+        <p>Track season points first, then reveal Oscar night and bonus views later by changing the developer toggles in <code>script.js</code>.</p>
       </div>
 
       <div class="leader-card" id="leaderCard"></div>
@@ -57,14 +57,7 @@
         <div class="table-wrap">
           <table>
             <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Player</th>
-                <th>Season</th>
-                <th>Oscar Night</th>
-                <th>Bonus</th>
-                <th>Best Pick</th>
-              </tr>
+              <tr id="leaderboardHeaderRow"></tr>
             </thead>
             <tbody id="leaderboardRows"></tbody>
           </table>
@@ -93,7 +86,7 @@
         </article>
         <article class="rule-card">
           <h3>Chaos Bonuses</h3>
-          <p>Diamond In The Ruff, Boldest Call, Best Value Pick prizes keep everyone involved.</p>
+          <p>Mid-season leader, biggest flop, biggest overperformer, and comeback prizes keep everyone involved.</p>
         </article>
       </div>
     </section>
