@@ -1,12 +1,37 @@
+/*
+  =========================================================
+  DEVELOPER-ONLY FEATURE TOGGLES
+  =========================================================
+  These settings are intentionally NOT user-facing.
+  Change true/false values here when you are ready to reveal
+  parts of the Oscar League site later in the season.
+
+  Recommended early-season setup:
+  - showAwardsSection: false
+  - showOscarNightFilter: false
+  - showBonusPointsFilter: false
+  - showOscarNightColumn: false
+  - showBonusPointsColumn: false
+
+  Later in the season, flip any of these to true.
+*/
+const FEATURE_TOGGLES = {
+  showAwardsSection: false,
+  showOscarNightFilter: false,
+  showBonusPointsFilter: false,
+  showOscarNightColumn: false,
+  showBonusPointsColumn: false,
+};
+
 const players = [
-  { name: 'Bobby', seasonPoints: 640, nightPoints: 120, bonusPoints: 55, bestPick: 'Best Picture winner' },
-  { name: 'Megan', seasonPoints: 602, nightPoints: 135, bonusPoints: 35, bestPick: 'Best Actress sweep' },
-  { name: 'Chris', seasonPoints: 575, nightPoints: 95, bonusPoints: 70, bestPick: 'Box office monster' },
-  { name: 'Alex', seasonPoints: 548, nightPoints: 110, bonusPoints: 40, bestPick: 'Animated Feature' },
-  { name: 'Jordan', seasonPoints: 521, nightPoints: 88, bonusPoints: 65, bestPick: 'BAFTA heater' },
-  { name: 'Taylor', seasonPoints: 496, nightPoints: 76, bonusPoints: 30, bestPick: 'Supporting Actor' },
-  { name: 'Sam', seasonPoints: 472, nightPoints: 140, bonusPoints: 25, bestPick: 'Oscar night surge' },
-  { name: 'Casey', seasonPoints: 438, nightPoints: 66, bonusPoints: 45, bestPick: 'Biggest flop bonus' }
+  { name: 'Bobby', seasonPoints: 640, nightPoints: 120, bonusPoints: 55, bestPick: 'Smashing Machine' },
+  { name: 'Megan', seasonPoints: 602, nightPoints: 135, bonusPoints: 35, bestPick: 'OBAA' },
+  { name: 'Chris', seasonPoints: 575, nightPoints: 95, bonusPoints: 70, bestPick: 'OBAA' },
+  { name: 'Alex', seasonPoints: 548, nightPoints: 110, bonusPoints: 40, bestPick: 'Wicked' },
+  { name: 'Jordan', seasonPoints: 521, nightPoints: 88, bonusPoints: 65, bestPick: 'OBAA' },
+  { name: 'Taylor', seasonPoints: 496, nightPoints: 76, bonusPoints: 30, bestPick: 'Sinners' },
+  { name: 'Sam', seasonPoints: 472, nightPoints: 140, bonusPoints: 25, bestPick: 'Sentimental Value' },
+  { name: 'Casey', seasonPoints: 438, nightPoints: 66, bonusPoints: 45, bestPick: 'Sinners' }
 ];
 
 const categories = [
@@ -30,6 +55,57 @@ const categories = [
 
 let currentSort = 'seasonPoints';
 
+const columns = [
+  { key: 'rank', label: 'Rank', visible: true },
+  { key: 'name', label: 'Player', visible: true },
+  { key: 'seasonPoints', label: 'Season', visible: true },
+  { key: 'nightPoints', label: 'Oscar Night', visible: FEATURE_TOGGLES.showOscarNightColumn },
+  { key: 'bonusPoints', label: 'Bonus', visible: FEATURE_TOGGLES.showBonusPointsColumn },
+  { key: 'bestPick', label: 'Current Best Pick', visible: true }
+];
+
+function isSortVisible(sortKey) {
+  if (sortKey === 'seasonPoints') return true;
+  if (sortKey === 'nightPoints') return FEATURE_TOGGLES.showOscarNightFilter;
+  if (sortKey === 'bonusPoints') return FEATURE_TOGGLES.showBonusPointsFilter;
+  return false;
+}
+
+function applyFeatureToggles() {
+  const awardsSection = document.getElementById('awards');
+  const awardsNavLink = document.querySelector('a[href="#awards"]');
+  const nightTab = document.querySelector('[data-sort="nightPoints"]');
+  const bonusTab = document.querySelector('[data-sort="bonusPoints"]');
+
+  if (awardsSection) awardsSection.hidden = !FEATURE_TOGGLES.showAwardsSection;
+  if (awardsNavLink) awardsNavLink.hidden = !FEATURE_TOGGLES.showAwardsSection;
+  if (nightTab) nightTab.hidden = !FEATURE_TOGGLES.showOscarNightFilter;
+  if (bonusTab) bonusTab.hidden = !FEATURE_TOGGLES.showBonusPointsFilter;
+
+  if (!isSortVisible(currentSort)) currentSort = 'seasonPoints';
+}
+
+function renderTableHeader() {
+  const headerRow = document.getElementById('leaderboardHeaderRow');
+  headerRow.innerHTML = columns
+    .filter(column => column.visible)
+    .map(column => `<th>${column.label}</th>`)
+    .join('');
+}
+
+function getColumnValue(player, column, index) {
+  const values = {
+    rank: `<span class="rank">#${index + 1}</span>`,
+    name: `<span class="player">${player.name}</span>`,
+    seasonPoints: player.seasonPoints,
+    nightPoints: player.nightPoints,
+    bonusPoints: player.bonusPoints,
+    bestPick: player.bestPick
+  };
+
+  return values[column.key];
+}
+
 function renderLeaderboard() {
   const sorted = [...players].sort((a, b) => b[currentSort] - a[currentSort]);
   const leader = sorted[0];
@@ -49,18 +125,19 @@ function renderLeaderboard() {
 
   document.getElementById('leaderboardRows').innerHTML = sorted.map((player, index) => `
     <tr>
-      <td class="rank">#${index + 1}</td>
-      <td class="player">${player.name}</td>
-      <td>${player.seasonPoints}</td>
-      <td>${player.nightPoints}</td>
-      <td>${player.bonusPoints}</td>
-      <td>${player.bestPick}</td>
+      ${columns
+        .filter(column => column.visible)
+        .map(column => `<td>${getColumnValue(player, column, index)}</td>`)
+        .join('')}
     </tr>
   `).join('');
 }
 
 function renderCategories() {
-  document.getElementById('awardGrid').innerHTML = categories.map(category => `
+  const awardGrid = document.getElementById('awardGrid');
+  if (!awardGrid || !FEATURE_TOGGLES.showAwardsSection) return;
+
+  awardGrid.innerHTML = categories.map(category => `
     <article class="award-card">
       <h3>${category.name}</h3>
       <p>Choice 1 and Choice 2 scoring values.</p>
@@ -72,14 +149,22 @@ function renderCategories() {
   `).join('');
 }
 
+function activateSortButton(sortKey) {
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.sort === sortKey);
+  });
+}
+
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
     currentSort = tab.dataset.sort;
+    activateSortButton(currentSort);
     renderLeaderboard();
   });
 });
 
+applyFeatureToggles();
+activateSortButton(currentSort);
+renderTableHeader();
 renderLeaderboard();
 renderCategories();
