@@ -1,109 +1,152 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oscar League</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050403">
+  <title>Silvercal Screeners Oscar League</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="hero">
-    <nav class="nav">
-      <div class="brand"><span class="brand-mark">★</span> Oscar League</div>
-      <div class="nav-links">
-        <a href="#leaderboard">Leaderboard</a>
-        <a href="#rules">Rules</a>
-        <a href="#awards">Awards</a>
-      </div>
-    </nav>
-
-    <section class="hero-content">
-      <p class="eyebrow">Awards Season Fantasy League</p>
-      <h1>Draft films. Score awards. Talk trash respectfully.</h1>
-      <p class="hero-copy">A private league hub for tracking season points, Oscar night points, bonus prizes, and every dramatic leaderboard swing.</p>
-      <div class="hero-actions">
-        <a class="button primary" href="#leaderboard">View Standings</a>
-        <a class="button secondary" href="#rules">Scoring Rules</a>
-      </div>
-    </section>
+  <!-- Mobile-first sticky header. The menu button controls the drawer below. -->
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Silvercal Screeners Oscar League home">
+      <span class="brand-kicker">Silvercal Screeners</span>
+      <span class="brand-title">Oscar League</span>
+    </a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mobileNav">
+      <span></span><span></span><span></span>
+      <span class="sr-only">Open navigation</span>
+    </button>
   </header>
 
+  <nav class="mobile-nav" id="mobileNav" aria-label="Primary navigation">
+    <a href="#standings">Standings</a>
+    <a href="#draft">Draft</a>
+    <a href="#awards" data-feature-link="awards">Awards</a>
+    <a href="#oscar-night" data-feature-link="oscarNight">Oscar Night</a>
+    <a href="#rules" data-feature-link="rules">Rules</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+
   <main>
-    <section class="score-strip" aria-label="League stats">
-      <div><span id="totalPlayers">8</span><small>Players</small></div>
-      <div><span id="totalFilms">24</span><small>Films Drafted</small></div>
-      <div><span id="awardsLeft">250</span><small>Days Till Oscars</small></div>
-      <div><span id="leaderName">Bobby</span><small>Current Leader</small></div>
+    <!--
+      HERO DESIGN
+      The image and copy occupy the same grid cell. The title is intentionally
+      positioned across the trophy's chest area, inspired by awards key art.
+    -->
+    <section class="hero" id="home">
+      <div class="hero-light" aria-hidden="true"></div>
+      <img class="hero-trophy" src="assets/oscar-doctor.png" alt="Gold Oscar-style doctor trophy">
+      <div class="hero-vignette" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <p class="hero-year">The 2026 Season</p>
+        <h1>
+          <span>Silvercal</span>
+          <span>Screeners</span>
+          <strong>Oscar League</strong>
+        </h1>
+        <p class="hero-tagline">Draft films <span>•</span> Score awards <span>•</span> Win glory</p>
+        <a class="hero-action" href="#standings">View standings</a>
+      </div>
+      <div class="hero-scroll" aria-hidden="true">Scroll</div>
     </section>
 
-    <section id="leaderboard" class="section">
+    <section class="quick-stats" aria-label="League statistics">
+      <article><span class="stat-value" id="memberCount">8</span><span class="stat-label">League members</span></article>
+      <article><span class="stat-value" id="filmCount">0</span><span class="stat-label">Films drafted</span></article>
+      <article><span class="stat-value" id="awardCount">0</span><span class="stat-label">Awards scored</span></article>
+      <article data-feature="oscarNight"><span class="stat-value" id="daysToOscar">—</span><span class="stat-label">Days to Oscar night</span></article>
+    </section>
+
+    <section class="section-shell" id="standings">
       <div class="section-heading">
-        <p class="eyebrow">Live Standings</p>
-        <h2>Leaderboard</h2>
-        <p>Track season points first, then reveal Oscar night and bonus views later by changing the developer toggles in <code>script.js</code>.</p>
+        <p>League standings</p>
+        <h2>Through September</h2>
       </div>
 
-      <div class="leader-card" id="leaderCard"></div>
-
-      <div class="table-card">
-        <div class="table-controls">
-          <button class="tab active" data-sort="seasonPoints">Season Points</button>
-          <button class="tab" data-sort="nightPoints">Oscar Night</button>
-          <button class="tab" data-sort="bonusPoints">Bonus Points</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr id="leaderboardHeaderRow"></tr>
-            </thead>
-            <tbody id="leaderboardRows"></tbody>
-          </table>
+      <div class="leader-showcase" id="leaderShowcase" aria-live="polite">
+        <div>
+          <span class="leader-eyebrow">Current leader</span>
+          <h3>Loading standings…</h3>
+          <p>Season points will appear here.</p>
         </div>
       </div>
+
+      <div class="mobile-score-cards" id="mobileScoreCards" aria-live="polite"></div>
+
+      <div class="table-card desktop-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player</th>
+              <th class="sortable" id="sortSeason" tabindex="0">Season</th>
+              <th class="bonus-column">Bonus</th>
+              <th class="oscar-night-column">Oscar Night</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody">
+            <tr><td colspan="6">Loading standings…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="status-line" id="statusText">Connecting to league data…</p>
     </section>
 
-    <section id="rules" class="section grid-two">
-      <div class="section-heading sticky-heading">
-        <p class="eyebrow">How It Works</p>
-        <h2>Scoring Rules</h2>
-        <p>Use these as a starting point for your league. They are designed for year-round engagement, not just Oscar night.</p>
-      </div>
-      <div class="rules-grid">
-        <article class="rule-card">
-          <h3>Oscar Wins</h3>
-          <p>Players earn points when their selected films win categories. Bigger categories are worth more.</p>
-        </article>
-        <article class="rule-card">
-          <h3>Box Office</h3>
-          <p>Earn points for domestic box office milestones, weekly No. 1 finishes, and surprise hits.</p>
-        </article>
-        <article class="rule-card">
-          <h3>Critics & Guilds</h3>
-          <p>Score across SAG, Critics Choice, Golden Globes, and BAFTA to keep the race alive all season.</p>
-        </article>
-        <article class="rule-card">
-          <h3>Chaos Bonuses</h3>
-          <p>Mid-season leader, biggest flop, biggest overperformer, and comeback prizes keep everyone involved.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="awards" class="section">
+    <section class="section-shell split-section" id="draft">
       <div class="section-heading">
-        <p class="eyebrow">Awards Board</p>
-        <h2>Oscar Category Values</h2>
+        <p>Build your roster</p>
+        <h2>Draft strategy</h2>
       </div>
-      <div class="award-grid" id="awardGrid"></div>
+      <div class="card-grid">
+        <article class="feature-card"><span>01</span><h3>Find value</h3><p>Balance expensive awards contenders with overlooked films that can earn points across the season.</p></article>
+        <article class="feature-card"><span>02</span><h3>Follow momentum</h3><p>Track box office, reviews, guild awards and nomination strength before committing your budget.</p></article>
+        <article class="feature-card"><span>03</span><h3>Stay alive</h3><p>Bonus prizes and midseason scoring create comeback paths even when an early pick misses.</p></article>
+      </div>
+    </section>
+
+    <section class="section-shell" id="awards" data-feature="awards">
+      <div class="section-heading"><p>Awards season</p><h2>Scoring checkpoints</h2></div>
+      <div class="timeline">
+        <article><time>January</time><h3>Golden Globes & Critics Choice</h3><p>The season opens with broad-category scoring and early momentum.</p></article>
+        <article><time>February</time><h3>BAFTA & Actor Awards</h3><p>Guild and international results reshape the leaderboard.</p></article>
+        <article><time>March</time><h3>Oscar Night</h3><p>The final ceremony decides the champion.</p></article>
+      </div>
+    </section>
+
+    <section class="section-shell oscar-night-section" id="oscar-night" data-feature="oscarNight">
+      <div class="section-heading"><p>Finale mode</p><h2>Oscar Night</h2></div>
+      <div class="info-panel">
+        <p>Enable the Oscar Night score column and live mode from the developer settings in <code>script.js</code>. The page automatically refreshes connected Google Sheet data.</p>
+      </div>
+    </section>
+
+    <section class="section-shell" id="rules" data-feature="rules">
+      <div class="section-heading"><p>How to play</p><h2>League rules</h2></div>
+      <div class="accordion-list" id="rulesList"></div>
+    </section>
+
+    <section class="section-shell" id="faq">
+      <div class="section-heading"><p>Need a ruling?</p><h2>Frequently asked</h2></div>
+      <div class="accordion-list">
+        <details><summary>How often does the leaderboard update?</summary><p>The connected Google Sheet refreshes automatically every minute by default.</p></details>
+        <details><summary>Can features be hidden before Oscar Night?</summary><p>Yes. Awards, rules, bonus points and Oscar Night elements each have developer-only toggles in <code>script.js</code>.</p></details>
+        <details><summary>Why are mobile standings cards used?</summary><p>Cards keep player names and score totals readable without forcing horizontal table scrolling.</p></details>
+      </div>
     </section>
   </main>
 
   <footer>
-    <p>Oscar League • Built for bragging rights, spreadsheets, and elite couch commentary.</p>
+    <span>Silvercal Screeners Oscar League</span>
+    <a href="#home">Back to top</a>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
