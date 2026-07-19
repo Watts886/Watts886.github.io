@@ -1,170 +1,186 @@
-/*
-  =========================================================
-  DEVELOPER-ONLY FEATURE TOGGLES
-  =========================================================
-  These settings are intentionally NOT user-facing.
-  Change true/false values here when you are ready to reveal
-  parts of the Oscar League site later in the season.
+/****************************************************************
+ SILVERCAL SCREENERS OSCAR LEAGUE — SCRIPT.JS
+ ---------------------------------------------------------------
+ Developer-only controls live in the first two objects below.
+****************************************************************/
 
-  Recommended early-season setup:
-  - showAwardsSection: false
-  - showOscarNightFilter: false
-  - showBonusPointsFilter: false
-  - showOscarNightColumn: false
-  - showBonusPointsColumn: false
-
-  Later in the season, flip any of these to true.
-*/
-const FEATURE_TOGGLES = {
-  showAwardsSection: false,
-  showOscarNightFilter: false,
-  showBonusPointsFilter: false,
-  showOscarNightColumn: false,
-  showBonusPointsColumn: false,
+const DEV_FEATURES = {
+  showAwardsSection: true,
+  showRulesSection: true,
+  showOscarNightSection: false,
+  showBonusPointsColumn: true,
+  showOscarNightColumn: false
 };
 
-const players = [
-  { name: 'Bobby', seasonPoints: 640, nightPoints: 120, bonusPoints: 55, bestPick: 'Smashing Machine' },
-  { name: 'Megan', seasonPoints: 602, nightPoints: 135, bonusPoints: 35, bestPick: 'OBAA' },
-  { name: 'Chris', seasonPoints: 575, nightPoints: 95, bonusPoints: 70, bestPick: 'OBAA' },
-  { name: 'Alex', seasonPoints: 548, nightPoints: 110, bonusPoints: 40, bestPick: 'Wicked' },
-  { name: 'Jordan', seasonPoints: 521, nightPoints: 88, bonusPoints: 65, bestPick: 'OBAA' },
-  { name: 'Taylor', seasonPoints: 496, nightPoints: 76, bonusPoints: 30, bestPick: 'Sinners' },
-  { name: 'Sam', seasonPoints: 472, nightPoints: 140, bonusPoints: 25, bestPick: 'Sentimental Value' },
-  { name: 'Casey', seasonPoints: 438, nightPoints: 66, bonusPoints: 45, bestPick: 'Sinners' }
+const CONFIG = {
+  sheetId: 'NEEDED',
+  standingsGid: '0',
+  refreshMs: 60000,
+  oscarNightDate: '2027-03-14T20:00:00-04:00'
+};
+
+const FALLBACK_PLAYERS = [
+  { player: 'Bobby', season: 135, bonus: 0, oscarNight: 0 },
+  { player: 'Haley', season: 128, bonus: 0, oscarNight: 0 },
+  { player: 'Liz', season: 112, bonus: 0, oscarNight: 0 },
+  { player: 'Tim', season: 98, bonus: 0, oscarNight: 0 },
+  { player: 'Sarah', season:95, bonus: 0, oscarNight: 0 },
+  { player: 'Katie', season: 90, bonus: 0, oscarNight: 0},
+  { player: 'Bessie', season: 85, bonus: 0, oscarNight: 0}
 ];
 
-const categories = [
-  { name: 'Best Picture', first: 80, second: 40 },
-  { name: 'Best Director', first: 60, second: 30 },
-  { name: 'Best Actor', first: 60, second: 30 },
-  { name: 'Best Actress', first: 60, second: 30 },
-  { name: 'Supporting Actor', first: 40, second: 20 },
-  { name: 'Supporting Actress', first: 40, second: 20 },
-  { name: 'Cinematography', first: 30, second: 15 },
-  { name: 'Animated Feature', first: 30, second: 15 },
-  { name: 'Adapted Screenplay', first: 30, second: 15 },
-  { name: 'Original Screenplay', first: 30, second: 15 },
-  { name: 'Production Design', first: 20, second: 10 },
-  { name: 'Visual Effects', first: 20, second: 10 },
-  { name: 'International Feature', first: 10, second: 5 },
-  { name: 'Documentary Feature', first: 10, second: 5 },
-  { name: 'Animated Short', first: 10, second: 5 },
-  { name: 'Live Action Short', first: 10, second: 5 }
+const RULES = [
+  { title: 'Draft budget', text: 'Each player builds a roster from the eligible film pool while remaining under the league budget.' },
+  { title: 'Season points', text: 'Films score through domestic box office, critical performance and designated awards shows.' },
+  { title: 'Bonus points', text: 'Commissioner-defined prizes may reward box-office leaders, overlooked value picks and midseason performance.' },
+  { title: 'Oscar Night', text: 'Final Oscar selections score live and can be displayed in their own leaderboard column.' }
 ];
 
-let currentSort = 'seasonPoints';
+const state = { players: [], sortDirection: 'desc' };
 
-const columns = [
-  { key: 'rank', label: 'Rank', visible: true },
-  { key: 'name', label: 'Player', visible: true },
-  { key: 'seasonPoints', label: 'Season', visible: true },
-  { key: 'nightPoints', label: 'Oscar Night', visible: FEATURE_TOGGLES.showOscarNightColumn },
-  { key: 'bonusPoints', label: 'Bonus', visible: FEATURE_TOGGLES.showBonusPointsColumn },
-  { key: 'bestPick', label: 'Current Best Pick', visible: true }
-];
+function getCsvUrl() {
+  return `https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/export?format=csv&gid=${CONFIG.standingsGid}`;
+}
 
-function isSortVisible(sortKey) {
-  if (sortKey === 'seasonPoints') return true;
-  if (sortKey === 'nightPoints') return FEATURE_TOGGLES.showOscarNightFilter;
-  if (sortKey === 'bonusPoints') return FEATURE_TOGGLES.showBonusPointsFilter;
-  return false;
+function numberFrom(value) {
+  const cleaned = String(value ?? '').replace(/[^0-9.-]/g, '');
+  const parsed = Number(cleaned);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function firstValue(row, names) {
+  for (const name of names) {
+    if (row[name] !== undefined && row[name] !== '') return row[name];
+  }
+  return '';
+}
+
+function normalizeRow(row) {
+  return {
+    player: String(firstValue(row, ['Player', 'Team', 'Name', 'Player Name']) || 'Unnamed Player').trim(),
+    season: numberFrom(firstValue(row, ['Season Points', 'SeasonPoints', 'Season Total', 'Points'])),
+    bonus: numberFrom(firstValue(row, ['Bonus Points', 'BonusPoints', 'Bonus'])),
+    oscarNight: numberFrom(firstValue(row, ['Oscar Night', 'Oscar Night Points', 'OscarNight']))
+  };
+}
+
+function totalFor(player) {
+  return player.season +
+    (DEV_FEATURES.showBonusPointsColumn ? player.bonus : 0) +
+    (DEV_FEATURES.showOscarNightColumn ? player.oscarNight : 0);
+}
+
+function sortedPlayers() {
+  const direction = state.sortDirection === 'desc' ? -1 : 1;
+  return [...state.players].sort((a, b) => (totalFor(a) - totalFor(b)) * direction);
 }
 
 function applyFeatureToggles() {
-  const awardsSection = document.getElementById('awards');
-  const awardsNavLink = document.querySelector('a[href="#awards"]');
-  const nightTab = document.querySelector('[data-sort="nightPoints"]');
-  const bonusTab = document.querySelector('[data-sort="bonusPoints"]');
-
-  if (awardsSection) awardsSection.hidden = !FEATURE_TOGGLES.showAwardsSection;
-  if (awardsNavLink) awardsNavLink.hidden = !FEATURE_TOGGLES.showAwardsSection;
-  if (nightTab) nightTab.hidden = !FEATURE_TOGGLES.showOscarNightFilter;
-  if (bonusTab) bonusTab.hidden = !FEATURE_TOGGLES.showBonusPointsFilter;
-
-  if (!isSortVisible(currentSort)) currentSort = 'seasonPoints';
+  document.querySelectorAll('[data-feature="awards"], [data-feature-link="awards"]').forEach(el => el.hidden = !DEV_FEATURES.showAwardsSection);
+  document.querySelectorAll('[data-feature="rules"], [data-feature-link="rules"]').forEach(el => el.hidden = !DEV_FEATURES.showRulesSection);
+  document.querySelectorAll('[data-feature="oscarNight"], [data-feature-link="oscarNight"]').forEach(el => el.hidden = !DEV_FEATURES.showOscarNightSection);
+  document.querySelectorAll('.bonus-column').forEach(el => el.hidden = !DEV_FEATURES.showBonusPointsColumn);
+  document.querySelectorAll('.oscar-night-column').forEach(el => el.hidden = !DEV_FEATURES.showOscarNightColumn);
 }
 
-function renderTableHeader() {
-  const headerRow = document.getElementById('leaderboardHeaderRow');
-  headerRow.innerHTML = columns
-    .filter(column => column.visible)
-    .map(column => `<th>${column.label}</th>`)
-    .join('');
+function renderRules() {
+  document.getElementById('rulesList').innerHTML = RULES.map(rule => `
+    <details>
+      <summary>${rule.title}</summary>
+      <p>${rule.text}</p>
+    </details>`).join('');
 }
 
-function getColumnValue(player, column, index) {
-  const values = {
-    rank: `<span class="rank">#${index + 1}</span>`,
-    name: `<span class="player">${player.name}</span>`,
-    seasonPoints: player.seasonPoints,
-    nightPoints: player.nightPoints,
-    bonusPoints: player.bonusPoints,
-    bestPick: player.bestPick
-  };
+function renderStandings() {
+  const players = sortedPlayers();
+  const leader = players[0];
 
-  return values[column.key];
-}
-
-function renderLeaderboard() {
-  const sorted = [...players].sort((a, b) => b[currentSort] - a[currentSort]);
-  const leader = sorted[0];
-
-  document.getElementById('leaderName').textContent = leader.name;
-  document.getElementById('totalPlayers').textContent = players.length;
-  document.getElementById('totalFilms').textContent = players.length * 3;
-
-  document.getElementById('leaderCard').innerHTML = `
+  document.getElementById('leaderShowcase').innerHTML = leader ? `
     <div>
-      <p class="eyebrow">Current Leader</p>
-      <h3>${leader.name}</h3>
-      <p>${leader.bestPick}</p>
-    </div>
-    <div class="leader-score">${leader[currentSort]}</div>
-  `;
+      <span class="leader-eyebrow">Current leader</span>
+      <h3>${leader.player}</h3>
+      <p>${totalFor(leader)} total points</p>
+    </div>` : '<div><h3>No standings yet</h3></div>';
 
-  document.getElementById('leaderboardRows').innerHTML = sorted.map((player, index) => `
-    <tr>
-      ${columns
-        .filter(column => column.visible)
-        .map(column => `<td>${getColumnValue(player, column, index)}</td>`)
-        .join('')}
-    </tr>
-  `).join('');
-}
-
-function renderCategories() {
-  const awardGrid = document.getElementById('awardGrid');
-  if (!awardGrid || !FEATURE_TOGGLES.showAwardsSection) return;
-
-  awardGrid.innerHTML = categories.map(category => `
-    <article class="award-card">
-      <h3>${category.name}</h3>
-      <p>Choice 1 and Choice 2 scoring values.</p>
-      <div class="award-points">
-        <span>1st: ${category.first}</span>
-        <span>2nd: ${category.second}</span>
+  document.getElementById('mobileScoreCards').innerHTML = players.map((player, index) => `
+    <article class="score-row">
+      <span class="rank-badge">${index + 1}</span>
+      <div class="score-player">
+        <strong>${player.player}</strong>
+        <span>${player.season} season${DEV_FEATURES.showBonusPointsColumn ? ` • ${player.bonus} bonus` : ''}${DEV_FEATURES.showOscarNightColumn ? ` • ${player.oscarNight} Oscar Night` : ''}</span>
       </div>
-    </article>
-  `).join('');
+      <span class="score-total">${totalFor(player)}</span>
+    </article>`).join('');
+
+  const visibleColumnCount = 4 + Number(DEV_FEATURES.showBonusPointsColumn) + Number(DEV_FEATURES.showOscarNightColumn);
+  document.getElementById('leaderboardBody').innerHTML = players.length ? players.map((player, index) => `
+    <tr>
+      <td>${index + 1}</td>
+      <td>${player.player}</td>
+      <td>${player.season}</td>
+      <td class="bonus-column" ${DEV_FEATURES.showBonusPointsColumn ? '' : 'hidden'}>${player.bonus}</td>
+      <td class="oscar-night-column" ${DEV_FEATURES.showOscarNightColumn ? '' : 'hidden'}>${player.oscarNight}</td>
+      <td>${totalFor(player)}</td>
+    </tr>`).join('') : `<tr><td colspan="${visibleColumnCount}">No leaderboard rows found.</td></tr>`;
+
+  document.getElementById('memberCount').textContent = players.length;
+  document.getElementById('statusText').textContent = `${players.length} players • sorted ${state.sortDirection === 'desc' ? 'highest to lowest' : 'lowest to highest'}`;
 }
 
-function activateSortButton(sortKey) {
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.classList.toggle('active', tab.dataset.sort === sortKey);
-  });
+function updateCountdown() {
+  const target = new Date(CONFIG.oscarNightDate);
+  const diff = target.getTime() - Date.now();
+  document.getElementById('daysToOscar').textContent = Number.isFinite(diff) ? Math.max(0, Math.ceil(diff / 86400000)) : '—';
 }
 
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    currentSort = tab.dataset.sort;
-    activateSortButton(currentSort);
-    renderLeaderboard();
+async function loadLeaderboard() {
+  try {
+    const response = await fetch(getCsvUrl(), { cache: 'no-store' });
+    if (!response.ok) throw new Error(`Sheet request failed: ${response.status}`);
+    const csv = await response.text();
+    const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true });
+    const rows = parsed.data.map(normalizeRow).filter(row => row.player && row.player !== 'Unnamed Player');
+    state.players = rows.length ? rows : FALLBACK_PLAYERS;
+    renderStandings();
+    document.getElementById('statusText').textContent += ` • updated ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+  } catch (error) {
+    console.warn('Using fallback standings:', error);
+    state.players = FALLBACK_PLAYERS;
+    renderStandings();
+    document.getElementById('statusText').textContent += ' • sample data shown';
+  }
+}
+
+function setupNavigation() {
+  const button = document.getElementById('menuButton');
+  const nav = document.getElementById('mobileNav');
+  button.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', String(!open));
+    nav.classList.toggle('open', !open);
   });
-});
+  nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+    button.setAttribute('aria-expanded', 'false');
+    nav.classList.remove('open');
+  }));
+}
+
+function setupSorting() {
+  const header = document.getElementById('sortSeason');
+  const toggleSort = () => {
+    state.sortDirection = state.sortDirection === 'desc' ? 'asc' : 'desc';
+    renderStandings();
+  };
+  header.addEventListener('click', toggleSort);
+  header.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') toggleSort();
+  });
+}
 
 applyFeatureToggles();
-activateSortButton(currentSort);
-renderTableHeader();
-renderLeaderboard();
-renderCategories();
+renderRules();
+setupNavigation();
+setupSorting();
+updateCountdown();
+loadLeaderboard();
+setInterval(loadLeaderboard, CONFIG.refreshMs);
