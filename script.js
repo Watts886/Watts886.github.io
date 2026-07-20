@@ -7,9 +7,9 @@
 const DEV_FEATURES = {
   showAwardsSection: true,
   showRulesSection: true,
-  showOscarNightSection: false,
+  showOscarNightSection: true,
   showBonusPointsColumn: true,
-  showOscarNightColumn: false
+  showOscarNightColumn: true
 };
 
 const CONFIG = {
@@ -30,10 +30,10 @@ const FALLBACK_PLAYERS = [
 ];
 
 const RULES = [
-  { title: 'Draft budget', text: 'Each player builds a roster from the eligible film pool while remaining under the league budget.' },
-  { title: 'Season points', text: 'Films score through domestic box office, critical performance and designated awards shows.' },
-  { title: 'Bonus points', text: 'Commissioner-defined prizes may reward box-office leaders, overlooked value picks and midseason performance.' },
-  { title: 'Oscar Night', text: 'Final Oscar selections score live and can be displayed in their own leaderboard column.' }
+  { title: 'Draft budget', text: 'Each player builds a roster from the eligible film pool while remaining under the league budget of $100.' },
+  { title: 'Season points', text: 'Box Office: <br> Movies released Sept. 26 or later earn 1 point per $1M domestic box office, milestone bonuses up to +25 points (through $200M), and +20 points for every week at No. 1. <br><br> Critical Reception: <br> Movies earn -5 to 100 points based on their Metacritic score. Scores are locked in on January 6 and only apply to films released by that date. <br><br>Awards Season: <br>Movies earn points for nominations and wins across the entire awards season (Gotham, Critics Choice, Golden Globes, SAG, DGA, PGA, BAFTA, WGA, Spirit Awards, Oscars, and more). Bigger awards and major categories are worth more. <br><br> Oscar Bonus:<br> The Academy Awards are the highest-value event, with 100 points for Best Picture, 75 points for major categories, and 50 points for technical categories.' },
+  { title: 'Bonus points', text: 'Commissioner-defined prizes may reward box-office leaders, overlooked value picks and midseason performances.' },
+  { title: 'Oscar Night', text: 'Oscar Night selections for all categories added to season totals, more prestige "above the line" awards give more points. ' }
 ];
 
 const state = { players: [], sortDirection: 'desc' };
