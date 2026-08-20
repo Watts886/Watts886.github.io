@@ -13,27 +13,143 @@ const DEV_FEATURES = {
 };
 
 const CONFIG = {
-  sheetId: 'NEEDED',
+  sheetId: '1Vm3mf2CBTucA6ejKzhd2irPa8nU08HPgAQqg6E7KPdw',
   standingsGid: '0',
   refreshMs: 60000,
   oscarNightDate: '2027-03-14T20:00:00-04:00'
 };
 
+
+
+const AWARDS_ODDS = [
+  {
+    category: 'Actor',
+    nominees: [
+      { name: 'Tom Cruise', odds: 87.9 },
+      { name: 'John Malkovich', odds: 82.0 },
+      { name: 'Ryan Gosling', odds: 70.3 }
+    ]
+  },
+  {
+    category: 'Picture',
+    nominees: [
+      { name: 'Project Hail Mary', odds: 92.3 },
+      { name: 'The Odyssey', odds: 88.0 },
+      { name: 'Wild Horse Nine', odds: 86.5 }
+    ]
+  },
+  {
+    category: 'Actress',
+    nominees: [
+      { name: 'Julianne Moore', odds: 89.6 },
+      { name: 'Renate Reinsve', odds: 75.2 },
+      { name: 'Michelle Williams', odds: 69.4 }
+    ]
+  },
+  {
+    category: 'Supp. Actor',
+    nominees: [
+      { name: 'Paul Giamatti', odds: 89.9 },
+      { name: 'John Goodman', odds: 85.6 },
+      { name: 'Sam Rockwell', odds: 80.6 }
+    ]
+  },
+  {
+    category: 'Supp. Actress',
+    nominees: [
+      { name: 'Penelope Cruz', odds: 79.3 },
+      { name: 'Anne Hathaway', odds: 78.7 },
+      { name: 'Mariana Di Girolamo', odds: 75.4 }
+    ]
+  },
+  {
+    category: 'Director',
+    nominees: [
+      { name: 'Christopher Nolan', odds: 85.8 },
+      { name: 'Alejandro G. Iñárritu', odds: 79.2 },
+      { name: 'Javier Ambrossi, Javier Calvo', odds: 70.4 }
+    ]
+  },
+  {
+    category: 'Adapted Screenplay',
+    nominees: [
+      { name: 'Project Hail Mary', odds: 91.8 },
+      { name: 'La Bola Negra', odds: 87.1 },
+      { name: 'The Odyssey', odds: 83.8 }
+    ]
+  },
+  {
+    category: 'Original Screenplay',
+    nominees: [
+      { name: 'Wild Horse Nine', odds: 91.4 },
+      { name: 'The Debut', odds: 84.6 },
+      { name: 'Digger', odds: 84.3 }
+    ]
+  },
+    {
+    category: 'Original Song',
+    nominees: [
+      { name: 'I Knew It, I Knew You - Toy Story 5', odds: 98.4 },
+      { name: 'La Nieve - La Bola Negra', odds: 84.6 },
+      { name: 'By Any Means - By Any Means', odds: 82.3 }
+    ]
+  }
+];
+
+function initialsFor(name) {
+  return name
+    .split(/[\s,]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(part => part[0])
+    .join('')
+    .toUpperCase();
+}
+
+function renderAwardsOdds() {
+  const grid = document.getElementById('oddsGrid');
+  if (!grid) return;
+
+  grid.innerHTML = AWARDS_ODDS.map(group => `
+    <article class="odds-card">
+      <h3>${group.category}</h3>
+      <div class="odds-list">
+        ${group.nominees.map((nominee, index) => `
+          <div class="odds-entry">
+            <span class="odds-avatar" aria-hidden="true">${initialsFor(nominee.name)}</span>
+            <div class="odds-name-wrap">
+              <span class="odds-rank">${index + 1}</span>
+              <span class="odds-name" title="${nominee.name}">${nominee.name}</span>
+            </div>
+            <span class="odds-percent">${nominee.odds.toFixed(1)}%</span>
+            <div class="odds-track" aria-label="${nominee.name}: ${nominee.odds.toFixed(1)} percent odds">
+              <div class="odds-fill" style="--odds-width:${nominee.odds}%"></div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </article>`).join('');
+
+  const updated = document.getElementById('oddsUpdated');
+  if (updated) {
+    updated.textContent = `Updated: ${new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })} ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+  }
+}
+
 const FALLBACK_PLAYERS = [
-  { player: 'Bobby', season: 135, bonus: 0, oscarNight: 0 },
-  { player: 'Haley', season: 128, bonus: 0, oscarNight: 0 },
-  { player: 'Liz', season: 112, bonus: 0, oscarNight: 0 },
-  { player: 'Tim', season: 98, bonus: 0, oscarNight: 0 },
-  { player: 'Sarah', season:95, bonus: 0, oscarNight: 0 },
-  { player: 'Katie', season: 90, bonus: 0, oscarNight: 0},
-  { player: 'Bessie', season: 85, bonus: 0, oscarNight: 0}
+  { player: 'Liz', season: 2135, bonus: 0, oscarNight: 0 },
+  { player: 'Tim', season: 2128, bonus: 0, oscarNight: 0 },
+  { player: 'Sarah', season: 2112, bonus: 0, oscarNight: 0 },
+  { player: 'Katie', season: 1198, bonus: 0, oscarNight: 0 },
+  { player: 'Bessie', season: 1178, bonus: 0, oscarNight: 0 },
+  { player: 'Haley', season: 1108, bonus: 0, oscarNight: 0 },
+  { player: 'Bobby', season: 198, bonus: 0, oscarNight: 0 }
 ];
 
 const RULES = [
   { title: 'Draft budget', text: 'Each player builds a roster from the eligible film pool while remaining under the league budget of $100.' },
-  { title: 'Season points', text: 'Box Office: <br> Movies released Sept. 26 or later earn 1 point per $1M domestic box office, milestone bonuses up to +25 points (through $200M), and +20 points for every week at No. 1. <br><br> Critical Reception: <br> Movies earn -5 to 100 points based on their Metacritic score. Scores are locked in on January 6 and only apply to films released by that date. <br><br>Awards Season: <br>Movies earn points for nominations and wins across the entire awards season (Gotham, Critics Choice, Golden Globes, SAG, DGA, PGA, BAFTA, WGA, Spirit Awards, Oscars, and more). Bigger awards and major categories are worth more. <br><br> Oscar Bonus:<br> The Academy Awards are the highest-value event, with 100 points for Best Picture, 75 points for major categories, and 50 points for technical categories.' },
-  { title: 'Bonus points', text: 'Commissioner-defined prizes may reward box-office leaders, overlooked value picks and midseason performances.' },
-  { title: 'Oscar Night', text: 'Oscar Night selections for all categories added to season totals, more prestige "above the line" awards give more points. ' }
+  { title: 'Season points', text: 'Box Office: <br> Movies released Sept. 26 or later earn 1 point per $1M domestic box office, milestone bonuses up to +25 points (through $200M), and +20 points for every week at No. 1.<br><br> Critical Reception: <br> Movies earn -5 to 100 points based on their Metacritic score. Scores are locked in on January 6 and only apply to films released by that date. <br><br> Awards Season:<br> Movies earn points for nominations and wins across the entire awards season (Gotham, Critics Choice, Golden Globes, SAG, DGA, PGA, BAFTA, WGA, Spirit Awards, Oscars, and more). Bigger awards and major categories are worth more. <br><br> Oscar Bonus: <br>The Academy Awards are the highest-value event, with 100 points for Best Picture, 75 points for major categories, and 50 points for technical categories.' },
+  { title: 'Bonus points', text: 'Points given out for Best Team Name, Biggest Box Office, Biggest Points Per Dollar' },
+  { title: 'Oscar Night', text: 'Oscar Night selections for all categories added to season totals, more prestige "above the line" awards give more points.' }
 ];
 
 const state = { players: [], sortDirection: 'desc' };
@@ -179,6 +295,7 @@ function setupSorting() {
 
 applyFeatureToggles();
 renderRules();
+renderAwardsOdds();
 setupNavigation();
 setupSorting();
 updateCountdown();
