@@ -88,7 +88,7 @@ button, input, select { font: inherit; }
   isolation: isolate;
   display: grid;
   place-items: center;
-  min-height: 500px;
+  min-height: clamp(610px, 88svh, 780px);
   overflow: hidden;
   background:
     radial-gradient(ellipse at 50% 44%, rgba(212, 153, 57, .3), transparent 45%),
@@ -110,11 +110,11 @@ button, input, select { font: inherit; }
   z-index: 1;
   top: 2.5%;
   left: 50%;
-  width: min(90vw, 500px);
-  height: 90%;
+  width: min(96vw, 515px);
+  height: 94%;
   transform: translateX(-50%);
   object-fit: cover;
-  object-position: 50% 0%;
+  object-position: 50% 3.3%;
   opacity: .86;
   filter: saturate(.75) contrast(1.12) brightness(.72) sepia(.12) drop-shadow(0 28px 48px rgba(0,0,0,.8));
   mask-image: linear-gradient(to bottom, #000 0 73%, transparent 98%);
@@ -149,17 +149,15 @@ button, input, select { font: inherit; }
 .hero h1 span { color: var(--white); font-family: Inter, sans-serif; font-size: clamp(1.05rem, 4.9vw, 1.45rem); font-weight: 800; line-height: 1.03; letter-spacing: .3em; text-indent: .3em; text-shadow: 0 3px 5px #000, 0 10px 26px #000; }
 .hero h1 strong {
   margin-top: .38rem;
-  color: goldenrod;
-  font-family: Georgia, serif;
+  color: transparent;
+  font-family: Cinzel, Georgia, serif;
   font-size: clamp(2.65rem, 12vw, 4.35rem);
   font-weight: 600;
   line-height: .88;
   letter-spacing: .015em;
-  background: linear-gradient(103deg, #fff3bd 0%, #d5a34e 22%, #fff4c7 46%, #b77925 69%, #f2cd72 100%);
+  background: linear-gradient(103deg, #fff0bd 0%, #d5a34e 22%, #fff4c7 46%, #b77925 69%, #f2cd72 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-stroke: 1px rgba(157, 89, 12, 0.82);
-  text-shadow: 0 3px 4px #000, 0 12px 30px rgba(0,0,0,.96), 0 0 36px rgba(0,0,0,.84);
 }
 .hero-tagline { margin: 1.15rem auto 0; color: var(--white); font-size: .67rem; font-weight: 700; letter-spacing: .11em; line-height: 1.8; text-transform: uppercase; text-shadow: 0 3px 10px #000; }
 .hero-tagline span { color: var(--gold-bright); padding: 0 .18rem; }
@@ -206,6 +204,199 @@ button, input, select { font: inherit; }
 code { color: var(--gold-pale); }
 footer { display: flex; flex-direction: column; gap: .8rem; padding: 2.2rem var(--page-pad); color: var(--muted); background: #020201; border-top: 1px solid var(--line); text-align: center; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; }
 footer a { color: var(--gold-bright); text-decoration: none; }
+
+
+/***************************************************************
+ AWARDS ODDS — MOBILE-FIRST TOP THREE CARDS
+***************************************************************/
+.odds-section {
+  position: relative;
+  overflow: hidden;
+  max-width: none;
+  padding-inline: var(--page-pad);
+  background:
+    radial-gradient(circle at 50% 5%, rgba(209, 155, 54, .14), transparent 30rem),
+    linear-gradient(180deg, rgba(3,3,2,.98), rgba(7,6,4,.98));
+  border-block: 1px solid rgba(229, 185, 84, .16);
+}
+
+.odds-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .18;
+  background-image: radial-gradient(circle, rgba(236, 187, 76, .55) 0 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, #000, transparent 62%);
+}
+
+.odds-hero,
+.odds-grid {
+  position: relative;
+  z-index: 1;
+  width: min(1180px, 100%);
+  margin-inline: auto;
+}
+
+.odds-hero {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.odds-kicker,
+.odds-subtitle {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: .22em;
+}
+
+.odds-kicker {
+  color: var(--gold-bright);
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.odds-hero h2 {
+  margin: .35rem 0 .25rem;
+  color: var(--gold-bright);
+  font-family: Cinzel, Georgia, serif;
+  font-size: clamp(2.35rem, 13vw, 4.8rem);
+  line-height: .95;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.odds-subtitle {
+  color: var(--white);
+  font-size: .68rem;
+  font-weight: 700;
+}
+
+.odds-updated {
+  margin: 1rem 0 0;
+  color: #d8c79e;
+  font-size: .78rem;
+}
+
+.odds-grid {
+  display: grid;
+  gap: .85rem;
+}
+
+.odds-card {
+  padding: 1.05rem;
+  border: 1px solid rgba(226, 194, 124, .25);
+  border-radius: 14px;
+  background:
+    linear-gradient(135deg, rgba(29,29,27,.95), rgba(13,14,13,.96));
+  box-shadow: 0 18px 45px rgba(0,0,0,.25);
+}
+
+.odds-card h3 {
+  margin: 0 0 .95rem;
+  color: var(--gold-bright);
+  font-size: .92rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+}
+
+.odds-list {
+  display: grid;
+  gap: .95rem;
+}
+
+.odds-entry {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  grid-template-areas:
+    "avatar content percent"
+    "avatar bar bar";
+  align-items: center;
+  column-gap: .7rem;
+  row-gap: .42rem;
+}
+
+.odds-avatar {
+  grid-area: avatar;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(226, 176, 65, .8);
+  border-radius: 50%;
+  color: #14100a;
+  background: linear-gradient(135deg, #f7d77d, #9b681b);
+  font-weight: 900;
+  font-size: .72rem;
+}
+
+.odds-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.odds-name-wrap {
+  grid-area: content;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+
+.odds-rank {
+  color: var(--gold-bright);
+  font-weight: 800;
+}
+
+.odds-name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--white);
+  font-size: .9rem;
+  font-weight: 650;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.odds-percent {
+  grid-area: percent;
+  color: var(--gold-bright);
+  font-size: .9rem;
+  font-weight: 800;
+}
+
+.odds-track {
+  grid-area: bar;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255,255,255,.09);
+}
+
+.odds-fill {
+  height: 100%;
+  width: var(--odds-width);
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f5c957, #d6a234 65%, #efcc75);
+  box-shadow: 0 0 16px rgba(223, 169, 54, .22);
+}
+
+@media (min-width: 760px) {
+  .odds-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .odds-card { padding: 1.35rem; }
+  .odds-card h3 { font-size: 1.02rem; }
+  .odds-name, .odds-percent { font-size: .98rem; }
+}
+
+@media (min-width: 1180px) {
+  .odds-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .odds-section { padding-block: 6.25rem; }
+}
 
 /* Tablet enhancement */
 @media (min-width: 720px) {
