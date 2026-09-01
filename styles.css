@@ -1,440 +1,2111 @@
-/***************************************************************
- SILVERCAL SCREENERS OSCAR LEAGUE — MOBILE-FIRST STYLES
- --------------------------------------------------------------
- Mobile is the default layout. Larger-screen enhancements are
- added at the bottom using min-width media queries.
-***************************************************************/
+/****************************************************************
+ SILVERCAL SCREENERS OSCAR LEAGUE — SCRIPT.JS
+ ---------------------------------------------------------------
+ Developer-only controls live in the first two objects below.
 
-:root {
-  --bg: #050403;
-  --bg-soft: #0d0a07;
-  --panel: rgba(15, 12, 9, 0.94);
-  --panel-light: rgba(28, 21, 14, 0.78);
-  --gold: #c99841;
-  --gold-bright: #f1cf79;
-  --gold-pale: #ffe6a3;
-  --white: #fbf6e8;
-  --muted: #b8ad9b;
-  --line: rgba(255, 229, 170, 0.16);
-  --shadow: 0 26px 70px rgba(0, 0, 0, 0.52);
-  --page-pad: clamp(1rem, 4vw, 1.4rem);
-}
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 72px; }
-body {
-  margin: 0;
-  min-width: 320px;
-  color: var(--white);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(203, 144, 55, 0.14), transparent 32rem),
-    linear-gradient(180deg, #030302, #090705 48%, #030302);
-  font-family: Inter, system-ui, sans-serif;
-  overflow-x: hidden;
-}
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: .16;
-  background-image: radial-gradient(circle, rgba(255,255,255,.22) 0 1px, transparent 1px);
-  background-size: 95px 95px;
-  mask-image: linear-gradient(to bottom, #000, transparent 78%);
-}
-a { color: inherit; }
-button, input, select { font: inherit; }
-.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-
-/* Mobile header */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 68px;
-  padding: .8rem var(--page-pad);
-  background: rgba(4, 3, 2, .86);
-  border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(18px);
-}
-.brand { text-decoration: none; text-transform: uppercase; line-height: 1; }
-.brand-kicker { display: block; margin-bottom: .28rem; color: var(--muted); font-size: .56rem; font-weight: 800; letter-spacing: .22em; }
-.brand-title { display: block; color: var(--gold-bright); font-family: Cinzel, serif; font-size: 1.08rem; letter-spacing: .08em; }
-.menu-button { display: grid; gap: 4px; width: 44px; height: 44px; place-content: center; color: inherit; background: transparent; border: 1px solid var(--line); border-radius: 999px; }
-.menu-button span:not(.sr-only) { display: block; width: 18px; height: 1px; background: var(--gold-bright); transition: transform .25s, opacity .25s; }
-.menu-button[aria-expanded="true"] span:nth-child(1) { transform: translateY(5px) rotate(45deg); }
-.menu-button[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-.menu-button[aria-expanded="true"] span:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
-.mobile-nav {
-  position: fixed;
-  z-index: 90;
-  inset: 68px 0 auto;
-  display: grid;
-  transform: translateY(-120%);
-  padding: .6rem var(--page-pad) 1.2rem;
-  background: rgba(5,4,3,.98);
-  border-bottom: 1px solid var(--line);
-  transition: transform .28s ease;
-}
-.mobile-nav.open { transform: translateY(0); }
-.mobile-nav a { padding: 1rem .4rem; color: var(--white); border-bottom: 1px solid rgba(255,255,255,.07); text-decoration: none; text-transform: uppercase; font-size: .76rem; font-weight: 700; letter-spacing: .16em; }
-
-/* Poster-style hero */
-.hero {
-  position: relative;
-  isolation: isolate;
-  display: grid;
-  place-items: center;
-  min-height: clamp(610px, 88svh, 780px);
-  overflow: hidden;
-  background:
-    radial-gradient(ellipse at 50% 44%, rgba(212, 153, 57, .3), transparent 45%),
-    linear-gradient(180deg, #0d0905 0%, #050403 68%, #020201 100%);
-  border-bottom: 1px solid var(--line);
-}
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    repeating-linear-gradient(115deg, transparent 0 74px, rgba(255,255,255,.012) 75px 76px),
-    radial-gradient(circle at 50% 32%, rgba(255,231,164,.12), transparent 29rem);
-}
-.hero-light { position: absolute; top: 6%; left: 50%; width: 88vw; height: 88vw; max-width: 620px; max-height: 620px; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(circle, rgba(234,179,87,.3), rgba(178,112,28,.08) 46%, transparent 70%); filter: blur(8px); }
-.hero-trophy {
-  position: absolute;
-  z-index: 1;
-  top: 2.5%;
-  left: 50%;
-  width: min(96vw, 515px);
-  height: 94%;
-  transform: translateX(-50%);
-  object-fit: cover;
-  object-position: 50% 3.3%;
-  opacity: .86;
-  filter: saturate(.75) contrast(1.12) brightness(.72) sepia(.12) drop-shadow(0 28px 48px rgba(0,0,0,.8));
-  mask-image: linear-gradient(to bottom, #000 0 73%, transparent 98%);
-}
-.hero-vignette {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.06) 0%, rgba(0,0,0,.08) 25%, rgba(0,0,0,.22) 62%, rgba(0,0,0,.84) 100%),
-    radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0,.24) 65%, rgba(0,0,0,.68) 100%);
-}
-.hero-copy {
-  position: relative;
-  z-index: 3;
-  width: min(92vw, 520px);
-  margin-top: clamp(80px, 16svh, 150px);
-  padding: 2rem .6rem;
-  text-align: center;
-}
-.hero-copy::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 8% -8%;
-  background: radial-gradient(ellipse, rgba(0,0,0,.82) 0%, rgba(0,0,0,.5) 43%, transparent 74%);
-  filter: blur(5px);
-}
-.hero-year { margin: 0 0 .75rem; color: var(--gold-pale); font-size: .68rem; font-weight: 800; letter-spacing: .34em; text-transform: uppercase; text-shadow: 0 2px 12px #000; }
-.hero h1 { margin: 0; text-transform: uppercase; }
-.hero h1 span, .hero h1 strong { display: block; }
-.hero h1 span { color: var(--white); font-family: Inter, sans-serif; font-size: clamp(1.05rem, 4.9vw, 1.45rem); font-weight: 800; line-height: 1.03; letter-spacing: .3em; text-indent: .3em; text-shadow: 0 3px 5px #000, 0 10px 26px #000; }
-.hero h1 strong {
-  margin-top: .38rem;
-  color: transparent;
-  font-family: Cinzel, Georgia, serif;
-  font-size: clamp(2.65rem, 12vw, 4.35rem);
-  font-weight: 600;
-  line-height: .88;
-  letter-spacing: .015em;
-  background: linear-gradient(103deg, #fff0bd 0%, #d5a34e 22%, #fff4c7 46%, #b77925 69%, #f2cd72 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-.hero-tagline { margin: 1.15rem auto 0; color: var(--white); font-size: .67rem; font-weight: 700; letter-spacing: .11em; line-height: 1.8; text-transform: uppercase; text-shadow: 0 3px 10px #000; }
-.hero-tagline span { color: var(--gold-bright); padding: 0 .18rem; }
-.hero-action { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; margin-top: 1.35rem; padding: .78rem 1.25rem; color: #160f05; background: linear-gradient(135deg, var(--gold-pale), var(--gold)); border-radius: 999px; text-decoration: none; text-transform: uppercase; font-size: .7rem; font-weight: 900; letter-spacing: .14em; box-shadow: 0 12px 32px rgba(0,0,0,.5); }
-.hero-scroll { position: absolute; z-index: 4; bottom: 1.1rem; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.46); font-size: .55rem; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; }
-
-/* Stats become two-column mobile cards */
-.quick-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border-bottom: 1px solid var(--line); }
-.quick-stats article { min-height: 118px; display: flex; flex-direction: column; justify-content: center; padding: 1.1rem var(--page-pad); background: linear-gradient(180deg, rgba(20,16,12,.98), rgba(8,7,5,.98)); text-align: center; }
-.stat-value { color: var(--gold-bright); font-family: Cinzel, serif; font-size: 1.85rem; line-height: 1; }
-.stat-label { margin-top: .5rem; color: var(--muted); font-size: .61rem; font-weight: 800; letter-spacing: .11em; line-height: 1.4; text-transform: uppercase; }
-
-.section-shell { width: min(100%, 1180px); margin: 0 auto; padding: 4rem var(--page-pad); }
-.section-heading { margin-bottom: 1.5rem; }
-.section-heading p { margin: 0 0 .55rem; color: var(--gold); font-size: .68rem; font-weight: 900; letter-spacing: .22em; text-transform: uppercase; }
-.section-heading h2 { margin: 0; max-width: 16ch; font-family: Cinzel, serif; font-size: clamp(1.85rem, 9vw, 3.3rem); font-weight: 600; line-height: 1.03; text-transform: uppercase; }
-
-.leader-showcase { position: relative; overflow: hidden; min-height: 190px; display: flex; align-items: end; padding: 1.5rem; background: radial-gradient(circle at 92% 15%, rgba(238,190,102,.2), transparent 16rem), linear-gradient(145deg, #20170d, #080604 68%); border: 1px solid rgba(226,176,83,.38); border-radius: 22px; box-shadow: var(--shadow); }
-.leader-showcase::after { content: "1"; position: absolute; right: .7rem; top: -.8rem; color: rgba(232,186,100,.1); font-family: Cinzel, serif; font-size: 10rem; line-height: 1; }
-.leader-showcase > div { position: relative; z-index: 1; }
-.leader-eyebrow { color: var(--gold-bright); font-size: .64rem; font-weight: 900; letter-spacing: .2em; text-transform: uppercase; }
-.leader-showcase h3 { margin: .5rem 0 .35rem; font-family: Cinzel, serif; font-size: 1.75rem; text-transform: uppercase; }
-.leader-showcase p { margin: 0; color: var(--muted); }
-
-.mobile-score-cards { display: grid; gap: .75rem; margin-top: 1rem; }
-.score-row { display: grid; grid-template-columns: 38px minmax(0,1fr) auto; align-items: center; gap: .8rem; padding: 1rem; background: var(--panel); border: 1px solid var(--line); border-radius: 15px; }
-.rank-badge { display: grid; place-items: center; width: 34px; height: 34px; color: #160f05; background: var(--gold-bright); border-radius: 50%; font-weight: 900; }
-.score-player { min-width: 0; }
-.score-player strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .95rem; }
-.score-player span { display: block; margin-top: .25rem; color: var(--muted); font-size: .68rem; }
-.score-total { color: var(--gold-bright); font-family: Cinzel, serif; font-size: 1.28rem; }
-.desktop-table-wrap { display: none; }
-.status-line { margin: 1rem .3rem 0; color: var(--muted); font-size: .72rem; }
-
-.card-grid, .timeline { display: grid; gap: 1rem; }
-.feature-card, .timeline article, .info-panel, .accordion-list details { padding: 1.4rem; background: linear-gradient(145deg, rgba(20,16,12,.94), rgba(8,7,5,.96)); border: 1px solid var(--line); border-radius: 18px; }
-.feature-card > span { color: var(--gold); font-family: Cinzel, serif; font-size: .85rem; }
-.feature-card h3, .timeline h3 { margin: .8rem 0 .5rem; color: var(--gold-bright); font-family: Cinzel, serif; text-transform: uppercase; }
-.feature-card p, .timeline p, .info-panel p, .accordion-list p { margin: 0; color: var(--muted); line-height: 1.7; }
-.timeline time { color: var(--white); font-size: .68rem; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
-.accordion-list { display: grid; gap: .75rem; }
-.accordion-list summary { cursor: pointer; color: var(--gold-bright); font-family: Cinzel, serif; font-size: .98rem; font-weight: 700; text-transform: uppercase; }
-.accordion-list p { margin-top: 1rem; }
-code { color: var(--gold-pale); }
-footer { display: flex; flex-direction: column; gap: .8rem; padding: 2.2rem var(--page-pad); color: var(--muted); background: #020201; border-top: 1px solid var(--line); text-align: center; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; }
-footer a { color: var(--gold-bright); text-decoration: none; }
+ IMPORTANT DATA BEHAVIOR:
+ - Leaderboard loads from Google Sheets once when the page opens.
+ - Oscar Odds load from Google Sheets once when the page opens.
+ - Neither section automatically refreshes.
+ - After updating Google Sheets, refresh the webpage.
+****************************************************************/
 
 
-/***************************************************************
- AWARDS ODDS — MOBILE-FIRST TOP THREE CARDS
-***************************************************************/
-.odds-section {
-  position: relative;
-  overflow: hidden;
-  max-width: none;
-  padding-inline: var(--page-pad);
-  background:
-    radial-gradient(circle at 50% 5%, rgba(209, 155, 54, .14), transparent 30rem),
-    linear-gradient(180deg, rgba(3,3,2,.98), rgba(7,6,4,.98));
-  border-block: 1px solid rgba(229, 185, 84, .16);
+/****************************************************************
+ SECTION 1 — DEVELOPER FEATURE TOGGLES
+ ---------------------------------------------------------------
+ Change a value from true to false to hide that feature.
+****************************************************************/
+
+const DEV_FEATURES = {
+
+  // Show or hide the Awards section.
+  showAwardsSection: true,
+
+  // Show or hide the Rules section.
+  showRulesSection: true,
+
+  // Show or hide the Oscar Night section.
+  showOscarNightSection: true,
+
+  // Show or hide Bonus Points in the leaderboard.
+  showBonusPointsColumn: true,
+
+  // Show or hide Oscar Night points in the leaderboard.
+  showOscarNightColumn: true,
+
+  // Show or hide the Awards Odds section and navigation link.
+  showAwardsOddsSection: true
+
+};
+
+
+/****************************************************************
+ SECTION 2 — GOOGLE SHEETS CONFIGURATION
+ ---------------------------------------------------------------
+
+ sheetId:
+ Identifies the entire Google Sheets workbook.
+
+ standingsGid:
+ Identifies the Leaderboard tab.
+
+ oddsGid:
+ Identifies the Oscar Odds tab.
+
+ Both tabs can live inside the SAME Google Sheets workbook.
+****************************************************************/
+
+const CONFIG = {
+
+  // Your current Google Sheets workbook ID.
+  sheetId: '1ARgMPO4XZMIfCbASiBOjZGSsjzBylDnWeJTJIP7Uh0o',
+
+  // Leaderboard tab GID.
+  standingsGid: '0',
+
+  // Oscar Odds tab GID.
+  oddsGid: '669695369',
+
+  // Automatic refreshing is currently disabled.
+  // This value is retained only in case you want to restore
+  // timed refreshing later.
+  refreshMs: 60000,
+
+  // Oscar Night date used by the countdown.
+  oscarNightDate: '2027-03-14T20:00:00-04:00'
+
+};
+
+
+/****************************************************************
+ SECTION 3 — AWARDS ODDS CATEGORY ORDER
+ ---------------------------------------------------------------
+ This controls the preferred order of the Oscar Odds cards.
+
+ Any category that exists in Google Sheets but is NOT included
+ here will still display after these categories.
+****************************************************************/
+
+const ODDS_CATEGORY_ORDER = [
+
+  'Actor',
+
+  'Picture',
+
+  'Actress',
+
+  'Supp. Actor',
+
+  'Supp. Actress',
+
+  'Director',
+
+  'Adapted Screenplay',
+
+  'Original Screenplay',
+
+  'Original Song'
+
+];
+
+
+/****************************************************************
+ SECTION 4 — OPTIONAL FALLBACK AWARDS ODDS
+ ---------------------------------------------------------------
+ Normally Awards Odds come directly from Google Sheets.
+
+ This data is retained ONLY as a fallback if the Google Sheet
+ cannot be reached.
+
+ Keeping this also prevents the Awards Odds area from appearing
+ completely empty if Google temporarily fails.
+****************************************************************/
+
+const FALLBACK_AWARDS_ODDS = [
+
+  {
+    category: 'Actor',
+    nominees: [
+      { name: 'Tom Cruise', odds: 87.9 },
+      { name: 'John Malkovich', odds: 82.0 },
+      { name: 'Ryan Gosling', odds: 70.3 }
+    ]
+  },
+
+  {
+    category: 'Picture',
+    nominees: [
+      { name: 'Project Hail Mary', odds: 92.3 },
+      { name: 'The Odyssey', odds: 88.0 },
+      { name: 'Wild Horse Nine', odds: 86.5 }
+    ]
+  },
+
+  {
+    category: 'Actress',
+    nominees: [
+      { name: 'Julianne Moore', odds: 89.6 },
+      { name: 'Renate Reinsve', odds: 75.2 },
+      { name: 'Michelle Williams', odds: 69.4 }
+    ]
+  },
+
+  {
+    category: 'Supp. Actor',
+    nominees: [
+      { name: 'Paul Giamatti', odds: 89.9 },
+      { name: 'John Goodman', odds: 85.6 },
+      { name: 'Sam Rockwell', odds: 80.6 }
+    ]
+  },
+
+  {
+    category: 'Supp. Actress',
+    nominees: [
+      { name: 'Penelope Cruz', odds: 79.3 },
+      { name: 'Anne Hathaway', odds: 78.7 },
+      { name: 'Mariana Di Girolamo', odds: 75.4 }
+    ]
+  },
+
+  {
+    category: 'Director',
+    nominees: [
+      { name: 'Christopher Nolan', odds: 85.8 },
+      { name: 'Alejandro G. Iñárritu', odds: 79.2 },
+      { name: 'Javier Ambrossi, Javier Calvo', odds: 70.4 }
+    ]
+  },
+
+  {
+    category: 'Adapted Screenplay',
+    nominees: [
+      { name: 'Project Hail Mary', odds: 91.8 },
+      { name: 'La Bola Negra', odds: 87.1 },
+      { name: 'The Odyssey', odds: 83.8 }
+    ]
+  },
+
+  {
+    category: 'Original Screenplay',
+    nominees: [
+      { name: 'Wild Horse Nine', odds: 91.4 },
+      { name: 'The Debut', odds: 84.6 },
+      { name: 'Digger', odds: 84.3 }
+    ]
+  },
+
+  {
+    category: 'Original Song',
+    nominees: [
+      {
+        name: 'I Knew It, I Knew You - Toy Story 5',
+        odds: 98.4
+      },
+      {
+        name: 'La Nieve - La Bola Negra',
+        odds: 84.6
+      },
+      {
+        name: 'By Any Means - By Any Means',
+        odds: 82.3
+      }
+    ]
+  }
+
+];
+
+
+/****************************************************************
+ SECTION 5 — FALLBACK LEADERBOARD PLAYERS
+ ---------------------------------------------------------------
+ Used only if the Leaderboard Google Sheet cannot be loaded.
+****************************************************************/
+
+const FALLBACK_PLAYERS = [
+
+  {
+    player: 'Liz',
+    season: 2135,
+    bonus: 0,
+    oscarNight: 0
+  },
+
+  {
+    player: 'Tim',
+    season: 2128,
+    bonus: 0,
+    oscarNight: 0
+  },
+
+  {
+    player: 'Sarah',
+    season: 2112,
+    bonus: 0,
+    oscarNight: 0
+  },
+
+  {
+    player: 'Katie',
+    season: 1198,
+    bonus: 0,
+    oscarNight: 0
+  },
+
+  {
+    player: 'Bessie',
+    season: 1178,
+    bonus: 0,
+    oscarNight: 0
+  },
+
+  {
+    player: 'Haley',
+    season: 1108,
+    bonus: 0,
+    oscarNight: 0
+  },
+
+  {
+    player: 'Bobby',
+    season: 198,
+    bonus: 0,
+    oscarNight: 0
+  }
+
+];
+
+
+/****************************************************************
+ SECTION 6 — LEAGUE RULES
+ ---------------------------------------------------------------
+ These remain exactly compatible with the existing accordion
+ markup and HTML/CSS.
+****************************************************************/
+
+const RULES = [
+
+  {
+    title: 'Draft budget',
+    text:
+      'Each player builds a roster from the eligible film pool while remaining under the league budget of $100.'
+  },
+
+  {
+    title: 'Season points',
+    text:
+      'Box Office: <br> Movies released Sept. 26 or later earn 1 point per $1M domestic box office, milestone bonuses up to +25 points (through $200M), and +20 points for every week at No. 1.<br><br> Critical Reception: <br> Movies earn -5 to 100 points based on their Metacritic score. Scores are locked in on January 6 and only apply to films released by that date. <br><br> Awards Season:<br> Movies earn points for nominations and wins across the entire awards season (Gotham, Critics Choice, Golden Globes, SAG, DGA, PGA, BAFTA, WGA, Spirit Awards, Oscars, and more). Bigger awards and major categories are worth more. <br><br> Oscar Bonus: <br>The Academy Awards are the highest-value event, with 100 points for Best Picture, 75 points for major categories, and 50 points for technical categories.'
+  },
+
+  {
+    title: 'Bonus points',
+    text:
+      'Points given out for Best Team Name, Biggest Box Office, Biggest Points Per Dollar'
+  },
+
+  {
+    title: 'Oscar Night',
+    text:
+      'Oscar Night selections for all categories added to season totals, more prestige "above the line" awards give more points.'
+  }
+
+];
+
+
+/****************************************************************
+ SECTION 7 — APPLICATION STATE
+****************************************************************/
+
+const state = {
+
+  // Leaderboard players.
+  players: [],
+
+  // Leaderboard sort direction.
+  sortDirection: 'desc',
+
+  // Raw normalized Oscar Odds rows.
+  oddsRows: []
+
+};
+
+
+/****************************************************************
+ SECTION 8 — HTML SAFETY HELPER
+ ---------------------------------------------------------------
+ Google Sheet text is inserted into the webpage.
+
+ This prevents text entered into the Sheet from accidentally
+ being interpreted as HTML.
+****************************************************************/
+
+function escapeHTML(value) {
+
+  return String(value ?? '')
+
+    .replace(/&/g, '&amp;')
+
+    .replace(/</g, '&lt;')
+
+    .replace(/>/g, '&gt;')
+
+    .replace(/"/g, '&quot;')
+
+    .replace(/'/g, '&#039;');
+
 }
 
-.odds-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: .18;
-  background-image: radial-gradient(circle, rgba(236, 187, 76, .55) 0 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: linear-gradient(to bottom, #000, transparent 62%);
+
+/****************************************************************
+ SECTION 9 — NAME INITIALS
+ ---------------------------------------------------------------
+ Preserves your existing avatar styling.
+
+ Example:
+ "Christopher Nolan" becomes "CN".
+****************************************************************/
+
+function initialsFor(name) {
+
+  return String(name ?? '')
+
+    .split(/[\s,]+/)
+
+    .filter(Boolean)
+
+    .slice(0, 2)
+
+    .map(part => part[0])
+
+    .join('')
+
+    .toUpperCase();
+
 }
 
-.odds-hero,
-.odds-grid {
-  position: relative;
-  z-index: 1;
-  width: min(1180px, 100%);
-  margin-inline: auto;
+
+/****************************************************************
+ SECTION 10 — NUMBER CONVERSION
+ ---------------------------------------------------------------
+ Removes symbols from Google Sheet values.
+
+ Examples:
+ "$1,200" becomes 1200
+ "87.9%" becomes 87.9
+****************************************************************/
+
+function numberFrom(value) {
+
+  const cleaned =
+    String(value ?? '')
+      .replace(/[^0-9.-]/g, '');
+
+  const parsed =
+    Number(cleaned);
+
+  return Number.isFinite(parsed)
+    ? parsed
+    : 0;
+
 }
 
-.odds-hero {
-  text-align: center;
-  margin-bottom: 1.5rem;
+
+/****************************************************************
+ SECTION 11 — FIND FIRST MATCHING GOOGLE SHEET COLUMN
+ ---------------------------------------------------------------
+ Allows multiple acceptable column names.
+****************************************************************/
+
+function firstValue(row, names) {
+
+  for (const name of names) {
+
+    if (
+      row[name] !== undefined &&
+      row[name] !== null &&
+      String(row[name]).trim() !== ''
+    ) {
+
+      return row[name];
+
+    }
+
+  }
+
+  return '';
+
 }
 
-.odds-kicker,
-.odds-subtitle {
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: .22em;
+
+/****************************************************************
+ SECTION 12 — BUILD GOOGLE SHEETS CSV URL
+****************************************************************/
+
+function getCsvUrl(gid) {
+
+  return (
+    `https://docs.google.com/spreadsheets/d/` +
+    `${CONFIG.sheetId}/export?format=csv&gid=${gid}`
+  );
+
 }
 
-.odds-kicker {
-  color: var(--gold-bright);
-  font-size: .72rem;
-  font-weight: 800;
+
+/****************************************************************
+ SECTION 13 — NORMALIZE LEADERBOARD ROW
+ ---------------------------------------------------------------
+ Recommended columns:
+
+ Player
+ Season Points
+ Bonus Points
+ Oscar Night
+
+ Multiple alternate headers are also supported.
+****************************************************************/
+
+function normalizeRow(row) {
+
+  return {
+
+    player: String(
+      firstValue(
+        row,
+        [
+          'Player',
+          'Team',
+          'Name',
+          'Player Name',
+          'Team Name'
+        ]
+      ) || 'Unnamed Player'
+    ).trim(),
+
+
+    season: numberFrom(
+      firstValue(
+        row,
+        [
+          'Season Points',
+          'SeasonPoints',
+          'Season Total',
+          'Season',
+          'Season Score',
+          'Points',
+          'Total Points',
+          'Total'
+        ]
+      )
+    ),
+
+
+    bonus: numberFrom(
+      firstValue(
+        row,
+        [
+          'Bonus Points',
+          'BonusPoints',
+          'Bonus',
+          'Bonuses'
+        ]
+      )
+    ),
+
+
+    oscarNight: numberFrom(
+      firstValue(
+        row,
+        [
+          'Oscar Night',
+          'Oscar Night Points',
+          'OscarNight',
+          'Night',
+          'Night Points'
+        ]
+      )
+    )
+
+  };
+
 }
 
-.odds-hero h2 {
-  margin: .35rem 0 .25rem;
-  color: var(--gold-bright);
-  font-family: Cinzel, Georgia, serif;
-  font-size: clamp(2.35rem, 13vw, 4.8rem);
-  line-height: .95;
-  text-transform: uppercase;
-  letter-spacing: .05em;
+
+/****************************************************************
+ SECTION 14 — PLAYER TOTAL
+****************************************************************/
+
+function totalFor(player) {
+
+  return (
+    player.season +
+
+    (
+      DEV_FEATURES.showBonusPointsColumn
+        ? player.bonus
+        : 0
+    ) +
+
+    (
+      DEV_FEATURES.showOscarNightColumn
+        ? player.oscarNight
+        : 0
+    )
+  );
+
 }
 
-.odds-subtitle {
-  color: var(--white);
-  font-size: .68rem;
-  font-weight: 700;
+
+/****************************************************************
+ SECTION 15 — SORT LEADERBOARD
+****************************************************************/
+
+function sortedPlayers() {
+
+  const direction =
+    state.sortDirection === 'desc'
+      ? -1
+      : 1;
+
+  return [...state.players]
+    .sort(
+      (a, b) =>
+        (totalFor(a) - totalFor(b)) * direction
+    );
+
 }
 
-.odds-updated {
-  margin: 1rem 0 0;
-  color: #d8c79e;
-  font-size: .78rem;
+
+/****************************************************************
+ SECTION 16 — FEATURE TOGGLES
+ ---------------------------------------------------------------
+ Keeps the original selectors and adds Awards Odds support.
+****************************************************************/
+
+function applyFeatureToggles() {
+
+  // Awards section.
+  document
+    .querySelectorAll(
+      '[data-feature="awards"], [data-feature-link="awards"]'
+    )
+    .forEach(
+      el =>
+        el.hidden =
+          !DEV_FEATURES.showAwardsSection
+    );
+
+
+  // Rules section.
+  document
+    .querySelectorAll(
+      '[data-feature="rules"], [data-feature-link="rules"]'
+    )
+    .forEach(
+      el =>
+        el.hidden =
+          !DEV_FEATURES.showRulesSection
+    );
+
+
+  // Oscar Night.
+  document
+    .querySelectorAll(
+      '[data-feature="oscarNight"], [data-feature-link="oscarNight"]'
+    )
+    .forEach(
+      el =>
+        el.hidden =
+          !DEV_FEATURES.showOscarNightSection
+    );
+
+
+  // Awards Odds.
+  document
+    .querySelectorAll(
+      '#awards-odds, [data-feature="awardsOdds"], [data-feature-link="awardsOdds"]'
+    )
+    .forEach(
+      el =>
+        el.hidden =
+          !DEV_FEATURES.showAwardsOddsSection
+    );
+
+
+  // Bonus Points leaderboard columns.
+  document
+    .querySelectorAll('.bonus-column')
+    .forEach(
+      el =>
+        el.hidden =
+          !DEV_FEATURES.showBonusPointsColumn
+    );
+
+
+  // Oscar Night leaderboard columns.
+  document
+    .querySelectorAll('.oscar-night-column')
+    .forEach(
+      el =>
+        el.hidden =
+          !DEV_FEATURES.showOscarNightColumn
+    );
+
 }
 
-.odds-grid {
-  display: grid;
-  gap: .85rem;
+
+/****************************************************************
+ SECTION 17 — RULES ACCORDION
+ ---------------------------------------------------------------
+ Preserves the exact <details> and <summary> structure expected
+ by the current CSS.
+****************************************************************/
+
+function renderRules() {
+
+  const rulesList =
+    document.getElementById('rulesList');
+
+  if (!rulesList) {
+    return;
+  }
+
+  rulesList.innerHTML =
+    RULES
+      .map(
+        rule => `
+          <details>
+
+            <summary>
+              ${rule.title}
+            </summary>
+
+            <p>
+              ${rule.text}
+            </p>
+
+          </details>
+        `
+      )
+      .join('');
+
 }
 
-.odds-card {
-  padding: 1.05rem;
-  border: 1px solid rgba(226, 194, 124, .25);
-  border-radius: 14px;
-  background:
-    linear-gradient(135deg, rgba(29,29,27,.95), rgba(13,14,13,.96));
-  box-shadow: 0 18px 45px rgba(0,0,0,.25);
+
+/****************************************************************
+ SECTION 18 — RENDER LEADERBOARD
+ ---------------------------------------------------------------
+ Preserves the existing HTML IDs and CSS class names:
+
+ leaderShowcase
+ mobileScoreCards
+ leaderboardBody
+ memberCount
+ statusText
+
+ score-row
+ rank-badge
+ score-player
+ score-total
+****************************************************************/
+
+function renderStandings() {
+
+  const players =
+    sortedPlayers();
+
+  const leader =
+    players[0];
+
+
+  /**************************************************************
+   CURRENT LEADER SHOWCASE
+  **************************************************************/
+
+  const leaderShowcase =
+    document.getElementById('leaderShowcase');
+
+  if (leaderShowcase) {
+
+    leaderShowcase.innerHTML =
+      leader
+
+        ? `
+            <div>
+
+              <span class="leader-eyebrow">
+                Current leader
+              </span>
+
+              <h3>
+                ${escapeHTML(leader.player)}
+              </h3>
+
+              <p>
+                ${totalFor(leader)} total points
+              </p>
+
+            </div>
+          `
+
+        : `
+            <div>
+              <h3>No standings yet</h3>
+            </div>
+          `;
+
+  }
+
+
+  /**************************************************************
+   MOBILE LEADERBOARD CARDS
+
+   IMPORTANT:
+   Existing class names are intentionally preserved so existing
+   CSS styling continues to work.
+  **************************************************************/
+
+  const mobileScoreCards =
+    document.getElementById('mobileScoreCards');
+
+  if (mobileScoreCards) {
+
+    mobileScoreCards.innerHTML =
+      players
+        .map(
+          (player, index) => `
+            <article class="score-row">
+
+              <span class="rank-badge">
+                ${index + 1}
+              </span>
+
+              <div class="score-player">
+
+                <strong>
+                  ${escapeHTML(player.player)}
+                </strong>
+
+                <span>
+
+                  ${player.season} season
+
+                  ${
+                    DEV_FEATURES.showBonusPointsColumn
+                      ? ` • ${player.bonus} bonus`
+                      : ''
+                  }
+
+                  ${
+                    DEV_FEATURES.showOscarNightColumn
+                      ? ` • ${player.oscarNight} Oscar Night`
+                      : ''
+                  }
+
+                </span>
+
+              </div>
+
+              <span class="score-total">
+                ${totalFor(player)}
+              </span>
+
+            </article>
+          `
+        )
+        .join('');
+
+  }
+
+
+  /**************************************************************
+   DESKTOP LEADERBOARD TABLE
+  **************************************************************/
+
+  const visibleColumnCount =
+    4 +
+    Number(
+      DEV_FEATURES.showBonusPointsColumn
+    ) +
+    Number(
+      DEV_FEATURES.showOscarNightColumn
+    );
+
+
+  const leaderboardBody =
+    document.getElementById('leaderboardBody');
+
+  if (leaderboardBody) {
+
+    leaderboardBody.innerHTML =
+      players.length
+
+        ? players
+            .map(
+              (player, index) => `
+                <tr>
+
+                  <td>
+                    ${index + 1}
+                  </td>
+
+                  <td>
+                    ${escapeHTML(player.player)}
+                  </td>
+
+                  <td>
+                    ${player.season}
+                  </td>
+
+                  <td
+                    class="bonus-column"
+                    ${
+                      DEV_FEATURES.showBonusPointsColumn
+                        ? ''
+                        : 'hidden'
+                    }
+                  >
+                    ${player.bonus}
+                  </td>
+
+                  <td
+                    class="oscar-night-column"
+                    ${
+                      DEV_FEATURES.showOscarNightColumn
+                        ? ''
+                        : 'hidden'
+                    }
+                  >
+                    ${player.oscarNight}
+                  </td>
+
+                  <td>
+                    ${totalFor(player)}
+                  </td>
+
+                </tr>
+              `
+            )
+            .join('')
+
+        : `
+            <tr>
+
+              <td colspan="${visibleColumnCount}">
+                No leaderboard rows found.
+              </td>
+
+            </tr>
+          `;
+
+  }
+
+
+  /**************************************************************
+   PLAYER COUNT
+  **************************************************************/
+
+  const memberCount =
+    document.getElementById('memberCount');
+
+  if (memberCount) {
+    memberCount.textContent =
+      players.length;
+  }
+
+
+  /**************************************************************
+   STATUS MESSAGE
+  **************************************************************/
+
+  const statusText =
+    document.getElementById('statusText');
+
+  if (statusText) {
+
+    statusText.textContent =
+      `${players.length} players • sorted ${
+        state.sortDirection === 'desc'
+          ? 'highest to lowest'
+          : 'lowest to highest'
+      }`;
+
+  }
+
 }
 
-.odds-card h3 {
-  margin: 0 0 .95rem;
-  color: var(--gold-bright);
-  font-size: .92rem;
-  line-height: 1.2;
-  text-transform: uppercase;
-  letter-spacing: .09em;
+
+/****************************************************************
+ SECTION 19 — OSCAR NIGHT COUNTDOWN
+ ---------------------------------------------------------------
+ Keeps the existing daysToOscar element.
+****************************************************************/
+
+function updateCountdown() {
+
+  const element =
+    document.getElementById('daysToOscar');
+
+  if (!element) {
+    return;
+  }
+
+
+  const target =
+    new Date(CONFIG.oscarNightDate);
+
+
+  const diff =
+    target.getTime() -
+    Date.now();
+
+
+  element.textContent =
+    Number.isFinite(diff)
+
+      ? Math.max(
+          0,
+          Math.ceil(
+            diff / 86400000
+          )
+        )
+
+      : '—';
+
 }
 
-.odds-list {
-  display: grid;
-  gap: .95rem;
+
+/****************************************************************
+ SECTION 20 — LOAD LEADERBOARD
+ ---------------------------------------------------------------
+ Downloads the Leaderboard tab ONCE.
+
+ The page does NOT automatically reload standings afterward.
+****************************************************************/
+
+async function loadLeaderboard() {
+
+  try {
+
+    // Download Leaderboard CSV.
+    const response =
+      await fetch(
+        getCsvUrl(CONFIG.standingsGid),
+        {
+          cache: 'no-store'
+        }
+      );
+
+
+    // Treat unsuccessful HTTP requests as errors.
+    if (!response.ok) {
+
+      throw new Error(
+        `Sheet request failed: ${response.status}`
+      );
+
+    }
+
+
+    // Read response as text.
+    const csv =
+      await response.text();
+
+
+    // Parse CSV into rows.
+    const parsed =
+      Papa.parse(
+        csv,
+        {
+          header: true,
+          skipEmptyLines: true
+        }
+      );
+
+
+    // Normalize rows.
+    const rows =
+      parsed.data
+
+        .map(normalizeRow)
+
+        .filter(
+          row =>
+            row.player &&
+            row.player !== 'Unnamed Player'
+        );
+
+
+    // Use Sheet rows when available.
+    // Otherwise use sample data.
+    state.players =
+      rows.length
+        ? rows
+        : FALLBACK_PLAYERS;
+
+
+    // Draw standings.
+    renderStandings();
+
+
+    // Add load time to status.
+    const statusText =
+      document.getElementById('statusText');
+
+
+    if (statusText) {
+
+      statusText.textContent +=
+        ` • updated ${
+          new Date().toLocaleTimeString(
+            [],
+            {
+              hour: 'numeric',
+              minute: '2-digit'
+            }
+          )
+        }`;
+
+    }
+
+  }
+
+  catch (error) {
+
+    console.warn(
+      'Using fallback standings:',
+      error
+    );
+
+
+    // Fall back to sample standings.
+    state.players =
+      FALLBACK_PLAYERS;
+
+
+    // Draw fallback standings.
+    renderStandings();
+
+
+    // Notify the visitor.
+    const statusText =
+      document.getElementById('statusText');
+
+
+    if (statusText) {
+
+      statusText.textContent +=
+        ' • sample data shown';
+
+    }
+
+  }
+
 }
 
-.odds-entry {
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) auto;
-  grid-template-areas:
-    "avatar content percent"
-    "avatar bar bar";
-  align-items: center;
-  column-gap: .7rem;
-  row-gap: .42rem;
+
+/****************************************************************
+ SECTION 21 — NORMALIZE OSCAR ODDS ROW
+ ---------------------------------------------------------------
+ Recommended Google Sheet columns:
+
+ Category
+ Rank
+ Nominee
+ Odds
+ Image URL
+ Updated
+
+ Required:
+ Category
+ Nominee
+ Odds
+
+ Rank is recommended.
+
+ Image URL and Updated are optional.
+****************************************************************/
+
+function normalizeOddsRow(row) {
+
+  return {
+
+    category:
+      String(
+        firstValue(
+          row,
+          [
+            'Category',
+            'Award',
+            'Category Name'
+          ]
+        )
+      ).trim(),
+
+
+    rank:
+      numberFrom(
+        firstValue(
+          row,
+          [
+            'Rank',
+            'Position'
+          ]
+        )
+      ),
+
+
+    name:
+      String(
+        firstValue(
+          row,
+          [
+            'Nominee',
+            'Name',
+            'Contender',
+            'Film',
+            'Person'
+          ]
+        )
+      ).trim(),
+
+
+    odds:
+      numberFrom(
+        firstValue(
+          row,
+          [
+            'Odds',
+            'Probability',
+            'Percentage',
+            'Percent'
+          ]
+        )
+      ),
+
+
+    imageUrl:
+      String(
+        firstValue(
+          row,
+          [
+            'Image URL',
+            'ImageURL',
+            'Image',
+            'Photo URL',
+            'Photo'
+          ]
+        )
+      ).trim(),
+
+
+    updated:
+      String(
+        firstValue(
+          row,
+          [
+            'Updated',
+            'Last Updated',
+            'Update Date',
+            'Updated At'
+          ]
+        )
+      ).trim()
+
+  };
+
 }
 
-.odds-avatar {
-  grid-area: avatar;
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  overflow: hidden;
-  border: 1px solid rgba(226, 176, 65, .8);
-  border-radius: 50%;
-  color: #14100a;
-  background: linear-gradient(135deg, #f7d77d, #9b681b);
-  font-weight: 900;
-  font-size: .72rem;
+
+/****************************************************************
+ SECTION 22 — GROUP OSCAR ODDS
+ ---------------------------------------------------------------
+ Rules:
+
+ 1. Group rows by Category.
+ 2. Rank numbers are used when provided.
+ 3. Otherwise highest odds come first.
+ 4. Only the top three contenders are displayed.
+****************************************************************/
+
+function groupAwardsOdds(rows) {
+
+  const groups = {};
+
+
+  /**************************************************************
+   GROUP EVERY ROW BY CATEGORY
+  **************************************************************/
+
+  rows.forEach(row => {
+
+    // Ignore incomplete rows.
+    if (
+      !row.category ||
+      !row.name
+    ) {
+
+      return;
+
+    }
+
+
+    // Create category array when needed.
+    if (!groups[row.category]) {
+
+      groups[row.category] = [];
+
+    }
+
+
+    // Add contender to category.
+    groups[row.category].push(row);
+
+  });
+
+
+  /**************************************************************
+   CONVERT GROUPS INTO AN ARRAY
+  **************************************************************/
+
+  const categories =
+    Object.entries(groups)
+
+      .map(
+        ([category, nominees]) => {
+
+          /********************************************************
+           SORT NOMINEES
+          ********************************************************/
+
+          nominees.sort(
+            (a, b) => {
+
+              // Both rows have a rank.
+              if (
+                a.rank > 0 &&
+                b.rank > 0
+              ) {
+
+                return (
+                  a.rank -
+                  b.rank
+                );
+
+              }
+
+
+              // Ranked contender comes first.
+              if (a.rank > 0) {
+                return -1;
+              }
+
+
+              if (b.rank > 0) {
+                return 1;
+              }
+
+
+              // Otherwise sort odds highest to lowest.
+              return (
+                b.odds -
+                a.odds
+              );
+
+            }
+          );
+
+
+          // Keep only top three.
+          return {
+
+            category,
+
+            nominees:
+              nominees.slice(0, 3)
+
+          };
+
+        }
+      );
+
+
+  /**************************************************************
+   SORT CATEGORY CARDS
+  **************************************************************/
+
+  categories.sort(
+    (a, b) => {
+
+      const aIndex =
+        ODDS_CATEGORY_ORDER
+          .indexOf(a.category);
+
+
+      const bIndex =
+        ODDS_CATEGORY_ORDER
+          .indexOf(b.category);
+
+
+      const aOrder =
+        aIndex === -1
+          ? Number.MAX_SAFE_INTEGER
+          : aIndex;
+
+
+      const bOrder =
+        bIndex === -1
+          ? Number.MAX_SAFE_INTEGER
+          : bIndex;
+
+
+      if (aOrder !== bOrder) {
+
+        return (
+          aOrder -
+          bOrder
+        );
+
+      }
+
+
+      // Alphabetize categories not in the preferred list.
+      return (
+        a.category
+          .localeCompare(b.category)
+      );
+
+    }
+  );
+
+
+  return categories;
+
 }
 
-.odds-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+
+/****************************************************************
+ SECTION 23 — CONVERT FALLBACK ODDS INTO SHEET-LIKE FORMAT
+****************************************************************/
+
+function fallbackOddsRows() {
+
+  const rows = [];
+
+
+  FALLBACK_AWARDS_ODDS
+    .forEach(group => {
+
+      group.nominees
+        .forEach(
+          (nominee, index) => {
+
+            rows.push({
+
+              category:
+                group.category,
+
+              rank:
+                index + 1,
+
+              name:
+                nominee.name,
+
+              odds:
+                nominee.odds,
+
+              imageUrl:
+                '',
+
+              updated:
+                ''
+
+            });
+
+          }
+        );
+
+    });
+
+
+  return rows;
+
 }
 
-.odds-name-wrap {
-  grid-area: content;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: .55rem;
+
+/****************************************************************
+ SECTION 24 — BUILD OSCAR ODDS AVATAR
+ ---------------------------------------------------------------
+ If an Image URL exists in Google Sheets, display that image.
+
+ Otherwise retain the existing initials-based avatar.
+
+ This preserves the current styling while allowing optional images.
+****************************************************************/
+
+function buildOddsAvatar(nominee) {
+
+  if (nominee.imageUrl) {
+
+    return `
+      <span
+        class="odds-avatar"
+        aria-hidden="true"
+      >
+        <img
+          src="${escapeHTML(nominee.imageUrl)}"
+          alt=""
+          loading="lazy"
+          style="
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            border-radius:inherit;
+          "
+        >
+      </span>
+    `;
+
+  }
+
+
+  return `
+    <span
+      class="odds-avatar"
+      aria-hidden="true"
+    >
+      ${initialsFor(nominee.name)}
+    </span>
+  `;
+
 }
 
-.odds-rank {
-  color: var(--gold-bright);
-  font-weight: 800;
+
+/****************************************************************
+ SECTION 25 — RENDER OSCAR ODDS
+ ---------------------------------------------------------------
+ IMPORTANT:
+
+ Existing CSS class names are intentionally preserved:
+
+ odds-card
+ odds-list
+ odds-entry
+ odds-avatar
+ odds-name-wrap
+ odds-rank
+ odds-name
+ odds-percent
+ odds-track
+ odds-fill
+
+ That means the current styling should continue working.
+****************************************************************/
+
+function renderAwardsOdds() {
+
+  const grid =
+    document.getElementById('oddsGrid');
+
+
+  if (!grid) {
+    return;
+  }
+
+
+  // Group Google Sheet data.
+  const categories =
+    groupAwardsOdds(
+      state.oddsRows
+    );
+
+
+  // Handle empty data.
+  if (!categories.length) {
+
+    grid.innerHTML = `
+      <div class="odds-loading">
+        No Oscar Odds are currently available.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  /**************************************************************
+   BUILD CATEGORY CARDS
+  **************************************************************/
+
+  grid.innerHTML =
+    categories
+
+      .map(
+        group => `
+
+          <article class="odds-card">
+
+            <h3>
+              ${escapeHTML(group.category)}
+            </h3>
+
+            <div class="odds-list">
+
+              ${
+                group.nominees
+
+                  .map(
+                    (nominee, index) => {
+
+                      // Prefer Sheet rank when available.
+                      const rank =
+                        nominee.rank > 0
+                          ? nominee.rank
+                          : index + 1;
+
+
+                      // Keep bar width between 0 and 100.
+                      const oddsWidth =
+                        Math.max(
+                          0,
+                          Math.min(
+                            100,
+                            nominee.odds
+                          )
+                        );
+
+
+                      return `
+
+                        <div class="odds-entry">
+
+                          ${
+                            buildOddsAvatar(
+                              nominee
+                            )
+                          }
+
+                          <div class="odds-name-wrap">
+
+                            <span class="odds-rank">
+                              ${rank}
+                            </span>
+
+                            <span
+                              class="odds-name"
+                              title="${escapeHTML(nominee.name)}"
+                            >
+                              ${escapeHTML(nominee.name)}
+                            </span>
+
+                          </div>
+
+                          <span class="odds-percent">
+                            ${nominee.odds.toFixed(1)}%
+                          </span>
+
+                          <div
+                            class="odds-track"
+                            role="progressbar"
+                            aria-label="${escapeHTML(nominee.name)}: ${nominee.odds.toFixed(1)} percent odds"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            aria-valuenow="${oddsWidth}"
+                          >
+
+                            <div
+                              class="odds-fill"
+                              style="--odds-width:${oddsWidth}%"
+                            ></div>
+
+                          </div>
+
+                        </div>
+                      `;
+
+                    }
+                  )
+
+                  .join('')
+              }
+
+            </div>
+
+          </article>
+        `
+      )
+
+      .join('');
+
+
+  /**************************************************************
+   UPDATE DATE/TIME
+  **************************************************************/
+
+  updateOddsTimestamp();
+
 }
 
-.odds-name {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--white);
-  font-size: .9rem;
-  font-weight: 650;
-  line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+/****************************************************************
+ SECTION 26 — OSCAR ODDS TIMESTAMP
+ ---------------------------------------------------------------
+ If an Updated value exists in Google Sheets, use it.
+
+ Otherwise display the time the page loaded the odds.
+****************************************************************/
+
+function updateOddsTimestamp() {
+
+  const updated =
+    document.getElementById('oddsUpdated');
+
+
+  if (!updated) {
+    return;
+  }
+
+
+  // Look for first Sheet row containing an update value.
+  const rowWithUpdate =
+    state.oddsRows.find(
+      row =>
+        row.updated
+    );
+
+
+  // Prefer Google Sheet update date.
+  if (rowWithUpdate) {
+
+    updated.textContent =
+      `Updated: ${rowWithUpdate.updated}`;
+
+    return;
+
+  }
+
+
+  // Fall back to browser date/time.
+  const now =
+    new Date();
+
+
+  updated.textContent =
+    `Updated: ${
+      now.toLocaleDateString(
+        [],
+        {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        }
+      )
+    } ${
+      now.toLocaleTimeString(
+        [],
+        {
+          hour: 'numeric',
+          minute: '2-digit'
+        }
+      )
+    }`;
+
 }
 
-.odds-percent {
-  grid-area: percent;
-  color: var(--gold-bright);
-  font-size: .9rem;
-  font-weight: 800;
+
+/****************************************************************
+ SECTION 27 — LOAD OSCAR ODDS
+ ---------------------------------------------------------------
+ Downloads Oscar Odds ONCE when the webpage opens.
+
+ It does NOT automatically refresh afterward.
+****************************************************************/
+
+async function loadAwardsOdds() {
+
+  const grid =
+    document.getElementById('oddsGrid');
+
+
+  // Stop quietly if the section is not present.
+  if (!grid) {
+    return;
+  }
+
+
+  // Make sure the GID is configured.
+  if (
+    !CONFIG.oddsGid ||
+    CONFIG.oddsGid === 'PASTE_ODDS_GID_HERE'
+  ) {
+
+    grid.innerHTML = `
+      <div class="odds-loading">
+
+        <strong>
+          Oscar Odds Google Sheet needs to be connected.
+        </strong>
+
+        <br><br>
+
+        Add the Oscar Odds tab GID to
+        <code>CONFIG.oddsGid</code>
+        in <code>script.js</code>.
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  try {
+
+    /************************************************************
+     DOWNLOAD OSCAR ODDS TAB
+    ************************************************************/
+
+    const response =
+      await fetch(
+        getCsvUrl(CONFIG.oddsGid),
+        {
+          cache: 'no-store'
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        `Oscar Odds Sheet request failed: ${response.status}`
+      );
+
+    }
+
+
+    // Convert response to text.
+    const csv =
+      await response.text();
+
+
+    /************************************************************
+     PARSE CSV
+    ************************************************************/
+
+    const parsed =
+      Papa.parse(
+        csv,
+        {
+          header: true,
+          skipEmptyLines: true
+        }
+      );
+
+
+    /************************************************************
+     NORMALIZE SHEET ROWS
+    ************************************************************/
+
+    const rows =
+      parsed.data
+
+        .map(normalizeOddsRow)
+
+        .filter(
+          row =>
+            row.category &&
+            row.name
+        );
+
+
+    /************************************************************
+     SAVE DATA
+    ************************************************************/
+
+    state.oddsRows =
+      rows.length
+
+        ? rows
+
+        : fallbackOddsRows();
+
+
+    /************************************************************
+     RENDER ODDS
+    ************************************************************/
+
+    renderAwardsOdds();
+
+  }
+
+  catch (error) {
+
+    console.warn(
+      'Using fallback Oscar Odds:',
+      error
+    );
+
+
+    /************************************************************
+     USE FALLBACK DATA
+    ************************************************************/
+
+    state.oddsRows =
+      fallbackOddsRows();
+
+
+    /************************************************************
+     DRAW FALLBACK DATA
+    ************************************************************/
+
+    renderAwardsOdds();
+
+
+    /************************************************************
+     OPTIONAL FALLBACK STATUS
+    ************************************************************/
+
+    const updated =
+      document.getElementById('oddsUpdated');
+
+
+    if (updated) {
+
+      updated.textContent +=
+        ' • sample data shown';
+
+    }
+
+  }
+
 }
 
-.odds-track {
-  grid-area: bar;
-  height: 8px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(255,255,255,.09);
+
+/****************************************************************
+ SECTION 28 — MOBILE NAVIGATION
+ ---------------------------------------------------------------
+ Preserves the existing IDs and "open" CSS class.
+****************************************************************/
+
+function setupNavigation() {
+
+  const button =
+    document.getElementById('menuButton');
+
+
+  const nav =
+    document.getElementById('mobileNav');
+
+
+  // Avoid JavaScript errors if navigation does not exist.
+  if (
+    !button ||
+    !nav
+  ) {
+
+    return;
+
+  }
+
+
+  button.addEventListener(
+    'click',
+    () => {
+
+      const open =
+        button
+          .getAttribute(
+            'aria-expanded'
+          ) === 'true';
+
+
+      button.setAttribute(
+        'aria-expanded',
+        String(!open)
+      );
+
+
+      nav.classList.toggle(
+        'open',
+        !open
+      );
+
+    }
+  );
+
+
+  nav
+    .querySelectorAll('a')
+    .forEach(
+      link =>
+        link.addEventListener(
+          'click',
+          () => {
+
+            button.setAttribute(
+              'aria-expanded',
+              'false'
+            );
+
+
+            nav.classList.remove(
+              'open'
+            );
+
+          }
+        )
+    );
+
 }
 
-.odds-fill {
-  height: 100%;
-  width: var(--odds-width);
-  border-radius: inherit;
-  background: linear-gradient(90deg, #f5c957, #d6a234 65%, #efcc75);
-  box-shadow: 0 0 16px rgba(223, 169, 54, .22);
+
+/****************************************************************
+ SECTION 29 — LEADERBOARD SORTING
+ ---------------------------------------------------------------
+ Preserves your existing clickable/keyboard-sortable Season
+ header behavior.
+****************************************************************/
+
+function setupSorting() {
+
+  const header =
+    document.getElementById('sortSeason');
+
+
+  // Prevent errors if the sortable header is missing.
+  if (!header) {
+    return;
+  }
+
+
+  const toggleSort =
+    () => {
+
+      // Reverse sort direction.
+      state.sortDirection =
+        state.sortDirection === 'desc'
+          ? 'asc'
+          : 'desc';
+
+
+      // Redraw standings immediately.
+      renderStandings();
+
+    };
+
+
+  // Mouse/touch activation.
+  header.addEventListener(
+    'click',
+    toggleSort
+  );
+
+
+  // Keyboard accessibility.
+  header.addEventListener(
+    'keydown',
+    event => {
+
+      if (
+        event.key === 'Enter' ||
+        event.key === ' '
+      ) {
+
+        // Prevent Space from scrolling the page.
+        event.preventDefault();
+
+        toggleSort();
+
+      }
+
+    }
+  );
+
 }
 
-@media (min-width: 760px) {
-  .odds-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .odds-card { padding: 1.35rem; }
-  .odds-card h3 { font-size: 1.02rem; }
-  .odds-name, .odds-percent { font-size: .98rem; }
-}
 
-@media (min-width: 1180px) {
-  .odds-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .odds-section { padding-block: 6.25rem; }
-}
+/****************************************************************
+ SECTION 30 — PAGE STARTUP
+ ---------------------------------------------------------------
 
-/* Tablet enhancement */
-@media (min-width: 720px) {
-  :root { --page-pad: clamp(1.5rem, 5vw, 3rem); }
-  .site-header { min-height: 78px; }
-  .mobile-nav { inset-block-start: 78px; }
-  .hero { min-height: 790px; }
-  .hero-trophy { width: min(72vw, 590px); }
-  .hero-copy { margin-top: 120px; }
-  .quick-stats { grid-template-columns: repeat(4, 1fr); }
-  .card-grid { grid-template-columns: repeat(3, 1fr); }
-  .timeline { grid-template-columns: repeat(3, 1fr); }
-  footer { flex-direction: row; justify-content: space-between; }
-}
+ The order below is intentional.
 
-/* Desktop enhancement — same composition, simply more breathing room */
-@media (min-width: 1080px) {
-  html { scroll-padding-top: 90px; }
-  .site-header { min-height: 90px; padding-inline: max(2.5rem, calc((100vw - 1320px)/2)); }
-  .brand-kicker { font-size: .62rem; }
-  .brand-title { font-size: 1.4rem; }
-  .menu-button { display: none; }
-  .mobile-nav { position: static; transform: none; display: flex; justify-content: flex-end; gap: 2rem; padding: 0 max(2.5rem, calc((100vw - 1320px)/2)); margin-top: -90px; height: 90px; pointer-events: none; background: transparent; border: 0; }
-  .mobile-nav a { display: flex; align-items: center; padding: 0; border: 0; pointer-events: auto; }
-  .hero { min-height: 820px; }
-  .hero-trophy { width: min(48vw, 620px); height: 97%; }
-  .hero-copy { width: min(70vw, 840px); margin-top: 140px; }
-  .hero h1 span { font-size: 1.6rem; }
-  .hero h1 strong { font-size: clamp(4.8rem, 7vw, 7rem); }
-  .hero-tagline { font-size: .78rem; letter-spacing: .22em; }
-  .section-shell { padding-block: 6rem; }
-  .section-heading h2 { max-width: 18ch; }
-  .mobile-score-cards { display: none; }
-  .desktop-table-wrap { display: block; margin-top: 1rem; overflow: hidden; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; }
-  table { width: 100%; border-collapse: collapse; }
-  th, td { padding: 1.2rem 1.4rem; border-bottom: 1px solid rgba(255,255,255,.07); text-align: left; }
-  th { color: var(--muted); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; }
-  td { color: var(--white); }
-  td:first-child, td:last-child { color: var(--gold-bright); font-weight: 800; }
-  .sortable { cursor: pointer; }
-}
+ 1. Apply developer feature toggles.
+ 2. Render league rules.
+ 3. Set up navigation.
+ 4. Set up leaderboard sorting.
+ 5. Update Oscar countdown.
+ 6. Load Leaderboard once.
+ 7. Load Oscar Odds once.
+
+ IMPORTANT:
+ There is NO automatic Google Sheet refresh timer.
+****************************************************************/
+
+
+// Apply section visibility.
+applyFeatureToggles();
+
+
+// Build rules accordion.
+renderRules();
+
+
+// Set up mobile menu.
+setupNavigation();
+
+
+// Activate leaderboard sorting.
+setupSorting();
+
+
+// Calculate days remaining until Oscar Night.
+updateCountdown();
+
+
+// Load leaderboard Google Sheet ONCE.
+loadLeaderboard();
+
+
+// Load Oscar Odds Google Sheet ONCE.
+loadAwardsOdds();
+
+
+/****************************************************************
+ OPTIONAL LOCAL COUNTDOWN REFRESH
+ ---------------------------------------------------------------
+ This updates the DAYS TO OSCAR number once an hour.
+
+ It DOES NOT contact Google Sheets.
+
+ Therefore it does not interfere with the page-load-only
+ Leaderboard or Oscar Odds behavior.
+****************************************************************/
+
+setInterval(
+  updateCountdown,
+  60 * 60 * 1000
+);
+
+
+/****************************************************************
+ IMPORTANT — GOOGLE SHEET REFRESH BEHAVIOR
+ ---------------------------------------------------------------
+
+ There is intentionally NO:
+
+ setInterval(loadLeaderboard, ...)
+
+ and NO:
+
+ setInterval(loadAwardsOdds, ...)
+
+ Both Google Sheets are downloaded only when the page opens.
+
+ After updating either Google Sheet:
+
+ REFRESH / RELOAD THE WEBSITE.
+
+****************************************************************/
