@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261018-pagination">
 </head>
 <body>
   <!-- Mobile-first sticky header. The menu button controls the drawer below. -->
@@ -25,7 +25,9 @@
 
   <nav class="mobile-nav" id="mobileNav" aria-label="Primary navigation">
     <a href="#standings">Standings</a>
+    <a href="#oscar-news">Oscar News</a>
     <a href="#draft">Drafted Films</a>
+    <a href="#movie-standings">Movie Leaderboard</a>
     <a href="#awards" data-feature-link="awards">Scoring Checkpoints</a>
     <a href="#awards-odds">Awards Odds</a>
     <a href="#oscar-night" data-feature-link="oscarNight">Oscar Night</a>
@@ -98,6 +100,12 @@
       <p class="status-line" id="statusText">Connecting to league data…</p>
     </section>
 
+    <section class="section-shell" id="oscar-news" aria-labelledby="oscarNewsTitle">
+      <div class="section-heading"><p>stay up to date with awards seasons</p><h2 id="oscarNewsTitle">Oscar News</h2></div>
+      <p class="status-line" id="newsStatus" role="status">Loading Oscar news…</p>
+      <div class="news-grid" id="newsGrid"></div>
+    </section>
+
     <section class="section-shell split-section" id="draft">
       <div class="section-heading">
         <p>Team Film Rosters</p>
@@ -116,6 +124,17 @@
         <article class="feature-card"><span>Camille's Team</span><h3>Wuthering Heights, Low Places</h3><p>Wuthering Heights - Verity - the Hunger Games: Sunrise on the Reaping - The Devil Wears Prada 2 - Wild Horse Nine - Hexed - Dune Part 3 - Omaha</p></article>      
         <article class="feature-card"><span>Ross' Team</span><h3>The Movie Mahdi</h3><p>Dune: Part Three - Avengers: Doomsday - Toy Story 5 - Backrooms - You Can See Everything - Madden - Ali G: Who Iz I? - How to Make a Killing</p></article>
       </div>
+    </section>
+
+    <section class="section-shell" id="movie-standings" aria-labelledby="movieLeaderboardTitle">
+      <div class="section-heading"><p>Drafted films · Season totals</p><h2 id="movieLeaderboardTitle">Movie Leaderboard</h2></div>
+      <div class="movie-table-wrap"><table>
+        <thead><tr><th scope="col">Rank</th><th scope="col">Movie</th><th scope="col">Total Points</th></tr></thead>
+        <tbody id="movieLeaderboardBody"><tr><td colspan="3">Loading movie totals…</td></tr></tbody>
+      </table></div>
+      <nav class="movie-pagination" id="moviePagination" aria-label="Movie leaderboard pages" hidden></nav>
+      <p class="status-line" id="moviePageStatus" role="status"></p>
+      <p class="status-line" id="movieStatusText" role="status">Connecting to movie data…</p>
     </section>
 
     <section class="section-shell" id="awards" data-feature="awards">
@@ -141,6 +160,8 @@
       <div class="odds-grid" id="oddsGrid" aria-live="polite"></div>
     </section>
 
+
+
     <section class="section-shell oscar-night-section" id="oscar-night" data-feature="oscarNight">
       <div class="section-heading"><p>Finale mode</p><h2>Oscar Night</h2></div>
       <div class="info-panel">
@@ -161,6 +182,6 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="script.js"></script>
+  <script src="script.js?v=20261018-pagination"></script>
 </body>
 </html>
