@@ -2287,7 +2287,7 @@ async function loadOscarNews() {
     }).slice(0, 6);
     renderOscarNews(articles);
     status.textContent = articles.length
-      ? 'stay up to date with awards seasons · Articles open on publisher websites.'
+      ? 'Articles open on publisher websites.'
       : 'Our next Oscar news picks are coming soon.';
   } catch (error) {
     status.textContent = error instanceof TypeError
