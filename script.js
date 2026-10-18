@@ -64,6 +64,12 @@ const CONFIG = {
   // Leaderboard tab GID.
   standingsGid: '0',
 
+  // Movie totals tab in the same workbook.
+  movieStandingsTab: 'Movie Scores',
+
+  // Curated article links. See OSCAR_NEWS_SETUP.md for column names.
+  newsGid: '860200650',
+
   // Oscar Odds tab GID.
   oddsGid: '669695369',
 
@@ -2109,3 +2115,188 @@ setInterval(
  REFRESH / RELOAD THE WEBSITE.
 
 ****************************************************************/
+
+// Separate movie totals tab. Headers are normalized to lowercase.
+function normalizeMovieRow(row) {
+  return {
+    movie: String(firstValue(row, ['movie', 'film', 'title', 'movie title', 'film title', 'movie name'])).trim(),
+    points: numberFrom(firstValue(row, ['total points', 'total', 'points', 'season points', 'season total']))
+  };
+}
+
+function renderMovieStandings(rows, page = 1) {
+  const ranked = [...rows].sort((a, b) => b.points - a.points || a.movie.localeCompare(b.movie));
+  const pageSize = 10;
+  const pageCount = Math.ceil(ranked.length / pageSize);
+  const currentPage = Math.max(1, Math.min(page, pageCount || 1));
+  const start = (currentPage - 1) * pageSize;
+  let rank = 0;
+  // Calculate ranks before slicing so ties retain their rank across pages.
+  const rankedRows = ranked.map((row, index) => {
+    if (index === 0 || row.points !== ranked[index - 1].points) rank = index + 1;
+    return { ...row, rank };
+  });
+  document.getElementById('movieLeaderboardBody').innerHTML = rankedRows.length
+    ? rankedRows.slice(start, start + pageSize).map(row =>
+        '<tr><td>' + row.rank + '</td><td>' + escapeHTML(row.movie) + '</td><td>' + row.points.toLocaleString() + '</td></tr>'
+      ).join('')
+    : '<tr><td colspan="3">No drafted movie totals yet.</td></tr>';
+  const pagination = document.getElementById('moviePagination');
+  pagination.replaceChildren();
+  pagination.hidden = pageCount <= 1;
+  for (let number = 1; number <= pageCount; number++) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = String(number);
+    button.setAttribute('aria-label', `Page ${number}, movies ${(number - 1) * pageSize + 1}–${Math.min(number * pageSize, ranked.length)}`);
+    button.setAttribute('aria-controls', 'movieLeaderboardBody');
+    if (number === currentPage) button.setAttribute('aria-current', 'page');
+    button.addEventListener('click', () => {
+      renderMovieStandings(rows, number);
+      pagination.querySelector('[aria-current="page"]').focus();
+    });
+    pagination.append(button);
+  }
+  document.getElementById('moviePageStatus').textContent = ranked.length
+    ? `Showing movies ${start + 1}–${Math.min(start + pageSize, ranked.length)} of ${ranked.length}`
+    : '';
+}
+
+async function loadMovieLeaderboard() {
+  const status = document.getElementById('movieStatusText');
+  const body = document.getElementById('movieLeaderboardBody');
+  if (!CONFIG.movieStandingsTab) {
+    body.innerHTML = '<tr><td colspan="3">Movie totals are coming soon.</td></tr>';
+    status.textContent = 'The movie scoring tab has not been connected yet.';
+    return;
+  }
+  try {
+    const response = await fetch(`https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(CONFIG.movieStandingsTab)}`, { cache: 'no-store' });
+    if (!response.ok) throw new Error('Movie sheet request failed: ' + response.status);
+    const parsed = Papa.parse(await response.text(), { header: true, skipEmptyLines: true, transformHeader: header => header.trim().toLowerCase() });
+    const headers = parsed.meta.fields || [];
+    if (!['movie', 'film', 'title', 'movie title', 'film title', 'movie name'].some(header => headers.includes(header)) ||
+        !['total points', 'total', 'points', 'season points', 'season total'].some(header => headers.includes(header))) {
+      throw new Error('Movie title or points column missing');
+    }
+    const rows = parsed.data.map(normalizeMovieRow).filter(row => row.movie);
+    renderMovieStandings(rows);
+    status.textContent = rows.length + ' drafted movies · Refresh the page for updated totals.';
+  } catch (error) {
+    body.innerHTML = '<tr><td colspan="3">Movie totals are unavailable.</td></tr>';
+    status.textContent = 'Unable to load movie totals. Please try refreshing the page.';
+    console.error('Movie leaderboard:', error);
+  }
+}
+
+// Like player standings, movie totals load once per page visit.
+loadMovieLeaderboard();
+
+// Curated news loads once per visit, using the same workbook as standings.
+// Sheet order is display order; put your most relevant article first.
+function normalizeNewsRow(row) {
+  const title = String(row.title || '').trim();
+  const source = String(row.source || '').trim();
+  const rawDate = String(row.date || '').trim();
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(rawDate);
+  if (!title || !source || !match) return null;
+  const date = new Date(`${rawDate}T12:00:00Z`);
+  if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== rawDate) return null;
+  try {
+    const url = new URL(String(row.url || '').trim());
+    if (url.protocol !== 'https:' || url.username || url.password) return null;
+    return { title, source, date, rawDate, url: url.href, summary: String(row.summary || '').trim() };
+  } catch {
+    return null;
+  }
+}
+
+function renderOscarNews(articles) {
+  const grid = document.getElementById('newsGrid');
+  const fragment = document.createDocumentFragment();
+  articles.forEach(article => {
+    const card = document.createElement('article');
+    card.className = 'news-card';
+    const meta = document.createElement('p');
+    meta.className = 'news-meta';
+    const time = document.createElement('time');
+    time.dateTime = article.rawDate;
+    time.textContent = article.date.toLocaleDateString(undefined, {
+      month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'
+    });
+    meta.append(`${article.source} · `, time);
+    const heading = document.createElement('h3');
+    const headline = document.createElement('a');
+    headline.href = article.url;
+    headline.target = '_blank';
+    headline.rel = 'noopener noreferrer';
+    headline.textContent = article.title;
+    headline.setAttribute('aria-label', `${article.title} (opens in a new tab)`);
+    heading.append(headline);
+    card.append(meta, heading);
+    if (article.summary) {
+      const summary = document.createElement('p');
+      summary.className = 'news-summary';
+      summary.textContent = article.summary;
+      card.append(summary);
+    }
+    const read = document.createElement('a');
+    read.className = 'news-read';
+    read.href = article.url;
+    read.target = '_blank';
+    read.rel = 'noopener noreferrer';
+    read.textContent = 'Read article ↗';
+    read.setAttribute('aria-label', `Read ${article.title} (opens in a new tab)`);
+    card.append(read);
+    fragment.append(card);
+  });
+  grid.replaceChildren(fragment);
+}
+
+async function loadOscarNews() {
+  const status = document.getElementById('newsStatus');
+  if (!status || !document.getElementById('newsGrid')) return;
+  try {
+    const response = await fetch(
+      getCsvUrl(CONFIG.newsGid),
+      { cache: 'no-store', signal: AbortSignal.timeout(15000) }
+    );
+    if (!response.ok) {
+      throw new Error(`Google Sheets returned HTTP ${response.status}. Check public read access to the news tab.`);
+    }
+    const csv = await response.text();
+    if (/^\s*(?:<!doctype html|<html)/i.test(csv)) {
+      throw new Error('Google returned a webpage instead of article data. Check public read access to the news tab.');
+    }
+    const parsed = Papa.parse(csv, {
+      header: true, skipEmptyLines: 'greedy',
+      transformHeader: header => header.trim().toLowerCase()
+    });
+    const headers = parsed.meta.fields || [];
+    if (!['title', 'url', 'source', 'date'].every(header => headers.includes(header))) {
+      throw new Error('The news tab needs Title, URL, Source, and Date headers in row 1.');
+    }
+    if (parsed.errors.some(error => error.type !== 'FieldMismatch')) {
+      throw new Error('The news data could not be read. Check the sheet for malformed cells.');
+    }
+    const seen = new Set();
+    const articles = parsed.data.map(normalizeNewsRow).filter(article => {
+      if (!article || seen.has(article.url)) return false;
+      seen.add(article.url);
+      return true;
+    }).slice(0, 6);
+    renderOscarNews(articles);
+    status.textContent = articles.length
+      ? 'stay up to date with awards seasons · Articles open on publisher websites.'
+      : 'Our next Oscar news picks are coming soon.';
+  } catch (error) {
+    status.textContent = error instanceof TypeError
+      ? 'Unable to connect to Oscar news. Check your connection and public access to the news tab.'
+      : error.name === 'TimeoutError'
+        ? 'Oscar news took too long to load. Please refresh the page.'
+        : `Oscar news is unavailable. ${error.message}`;
+    console.error('Oscar news:', error);
+  }
+}
+
+loadOscarNews();
