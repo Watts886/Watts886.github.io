@@ -70,6 +70,9 @@ const CONFIG = {
   // Curated article links. See OSCAR_NEWS_SETUP.md for column names.
   newsGid: '860200650',
 
+  // Optional event log: Date, Movie, Event, Points, Category, Result.
+  scoringActivityTab: 'Scoring Activity',
+
   // Oscar Odds tab GID.
   oddsGid: '669695369',
 
@@ -324,6 +327,8 @@ const RULES = [
 ****************************************************************/
 
 const state = {
+
+  playersAreLive: false,
 
   // Leaderboard players.
   players: [],
@@ -938,6 +943,8 @@ function renderStandings() {
 
   }
 
+  document.dispatchEvent(new Event('league-standings-updated'));
+
 }
 
 
@@ -1049,6 +1056,8 @@ async function loadLeaderboard() {
         ? rows
         : FALLBACK_PLAYERS;
 
+    state.playersAreLive = rows.length > 0;
+
 
     // Draw standings.
     renderStandings();
@@ -1087,6 +1096,8 @@ async function loadLeaderboard() {
     // Fall back to sample standings.
     state.players =
       FALLBACK_PLAYERS;
+
+    state.playersAreLive = false;
 
 
     // Draw fallback standings.
@@ -2138,7 +2149,7 @@ function renderMovieStandings(rows, page = 1) {
   });
   document.getElementById('movieLeaderboardBody').innerHTML = rankedRows.length
     ? rankedRows.slice(start, start + pageSize).map(row =>
-        '<tr><td>' + row.rank + '</td><td>' + escapeHTML(row.movie) + '</td><td>' + row.points.toLocaleString() + '</td></tr>'
+        '<tr><td>' + row.rank + '</td><td><a href="#film-details" data-film-title="' + escapeHTML(row.movie) + '">' + escapeHTML(row.movie) + '</a></td><td>' + row.points.toLocaleString() + '</td></tr>'
       ).join('')
     : '<tr><td colspan="3">No drafted movie totals yet.</td></tr>';
   const pagination = document.getElementById('moviePagination');
@@ -2180,7 +2191,9 @@ async function loadMovieLeaderboard() {
       throw new Error('Movie title or points column missing');
     }
     const rows = parsed.data.map(normalizeMovieRow).filter(row => row.movie);
+    state.movieRows = rows;
     renderMovieStandings(rows);
+    document.dispatchEvent(new CustomEvent('league-movies-updated', { detail: rows }));
     status.textContent = rows.length + ' drafted movies · Refresh the page for updated totals.';
   } catch (error) {
     body.innerHTML = '<tr><td colspan="3">Movie totals are unavailable.</td></tr>';
@@ -2286,8 +2299,9 @@ async function loadOscarNews() {
       return true;
     }).slice(0, 6);
     renderOscarNews(articles);
+    document.dispatchEvent(new Event('league-news-updated'));
     status.textContent = articles.length
-      ? 'Articles open on publisher websites.'
+      ? 'stay up to date with awards seasons · Articles open on publisher websites.'
       : 'Our next Oscar news picks are coming soon.';
   } catch (error) {
     status.textContent = error instanceof TypeError
