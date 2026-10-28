@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261019-sections">
+  <link rel="stylesheet" href="styles.css?v=20261028-checkpoints">
 </head>
 <body>
   <!-- Mobile-first sticky header. The menu button controls the drawer below. -->
@@ -152,6 +152,7 @@
       <input class="film-search" id="filmSearch" type="search" placeholder="Search drafted films…" aria-controls="filmDetailsList">
       <p class="status-line" id="filmSearchStatus" role="status"></p>
       <div id="filmDetailsList" class="film-browser"></div>
+      <nav class="movie-pagination" id="filmDetailsPagination" aria-label="Film details pages" hidden></nav>
     </section>
 
     <section class="section-shell" id="standings-movement" aria-labelledby="standingsMovementTitle">
@@ -162,12 +163,364 @@
 
     <section class="section-shell" id="awards" data-feature="awards">
       <div class="section-heading"><p>Awards season</p><h2>Scoring checkpoints</h2></div>
-      <div class="timeline">
-        <article><time>September</time><h3>Film Draft</h3><p>Draft the 8 Films that will win you Glory or bust your box office hopes.</p></article>
-        <article><time>December</time><h3>Critics Choice & Golden Globes Noms</h3><p>The first clues of where the awards season is going.</p></article>
-        <article><time>January</time><h3>CCA, GG Awards & Oscar Nominations</h3><p>Momentum for some films grows, while others hopes are starting to fade.</p></article>
-        <article><time>February</time><h3>BAFTA & SAG Awards</h3><p>Are some categories gettig locked or more confusion being seeded?</p></article>
-        <article><time>March</time><h3>Oscar Night</h3><p>The final ceremony decides the champion.</p></article>
+      <p class="status-line">2026–2027 season · Select a checkpoint for category points. Dates marked Estimated are provisional historical estimates; other dates follow the league schedule.</p>
+      <div class="timeline checkpoint-grid">
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2026-10-27">October 27, 2026</time>
+            <h3>Gotham Awards Nominations</h3>
+            <span class="checkpoint-points">10–15 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Nomination in the following categories: 10 points</p>
+            <ul><li>Best Screenplay</li><li>Breakthrough Director</li><li>Breakthrough Performer</li><li>Documentary Feature</li><li>International Feature</li></ul>
+            <p>Nomination in the following categories: 15 points</p>
+            <ul><li>Best Feature</li><li>Best Director</li><li>Outstanding Lead Performance</li><li>Outstanding Supporting Performance</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2026-11">Mid–late November 2026</time>
+            <span class="checkpoint-estimate">Estimated · Date TBA</span>
+            <h3>AARP Movies for Grownups Awards Nominations</h3>
+            <span class="checkpoint-points">5–10 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Nomination for Best Movie for Grown-ups: 10 points</p>
+            <p>Nomination in any other category: 5 points</p>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2026-11-30">November 30, 2026</time>
+            <h3>Gotham Awards</h3>
+            <span class="checkpoint-points">15–25 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win in the following categories: 15 points</p>
+            <ul><li>Best Screenplay</li><li>Breakthrough Director</li><li>Breakthrough Performer</li><li>Documentary Feature</li><li>International Feature</li><li>Special Category (e.g., Ensemble)</li></ul>
+            <p>Win in the following categories: 25 points</p>
+            <ul><li>Best Feature</li><li>Best Director</li><li>Outstanding Lead Performance</li><li>Outstanding Supporting Performance</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2026-12-02">December 2, 2026</time>
+            <h3>Film Independent Spirit Awards Nominations</h3>
+            <span class="checkpoint-points">5–15 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Nomination in the following categories: 5 points</p>
+            <ul><li>First Feature</li><li>First Screenplay</li><li>Documentary Feature</li><li>International Feature</li><li>Cinematography</li><li>Editing</li><li>John Cassavetes Award</li></ul>
+            <p>Nomination in the following categories: 15 points</p>
+            <ul><li>Best Feature</li><li>Best Director</li><li>Best Lead Performance</li><li>Best Supporting Performance</li><li>Best Breakthrough Performance</li><li>Best Screenplay</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2026-12">Early December 2026</time>
+            <span class="checkpoint-estimate">Estimated · Date TBA</span>
+            <h3>New York Film Critics Circle Awards</h3>
+            <span class="checkpoint-points">10–20 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win for Best Film: 20 points</p>
+            <p>Win in the following categories: 10 points</p>
+            <ul><li>Best Director</li><li>Best Actor</li><li>Best Actress</li><li>Best Supporting Actor</li><li>Supporting Actress</li><li>Best Screenplay</li><li>Best Animated Film</li><li>Best Cinematography</li><li>Best Nonfiction Film</li><li>Best Foreign-Language Film</li><li>Best First Film</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2026-12">Early December 2026</time>
+            <span class="checkpoint-estimate">Estimated · Date TBA</span>
+            <h3>National Board of Review Awards</h3>
+            <span class="checkpoint-points">10–20 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win for Best Film: 20 points</p>
+            <p>Earn a spot on the Top 10 Best Films List: 15 points</p>
+            <p>Win in the following categories: 10 points</p>
+            <ul><li>Best Director</li><li>Best Actor</li><li>Best Actress</li><li>Best Supporting Actor</li><li>Best Supporting Actress</li><li>Best Acting by an Ensemble</li><li>Breakthrough Performance</li><li>Best Screenplay</li><li>Best Cinematography</li><li>Best Stunt Artistry</li><li>Best Editing</li><li>Best Production Design</li><li>Best Music Score</li><li>Best International Film</li><li>Spotlight Award</li><li>Best Documentary/Nonfiction Film</li><li>Best Animation</li><li>Top 5 Foreign Films</li><li>Best Directorial Debut</li><li>Top 5 Documentaries</li><li>Top 10 Independent Films</li><li>NBR Freedom of Expression</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2026-12-04">December 4, 2026</time>
+            <h3>Golden Globe Awards Nominations</h3>
+            <span class="checkpoint-points">15–20 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Nomination for Best Picture (Drama, Musical/Comedy): 20 points</p>
+            <p>Nomination in the following categories: 15 points</p>
+            <ul><li>Cinematic and Box Office Achievement</li><li>Best Director</li><li>Best Actor, Drama</li><li>Best Actress, Drama</li><li>Best Actor, Musical/Comedy</li><li>Best Actress, Musical/Comedy</li><li>Best Supporting Actor</li><li>Best Supporting Actress</li><li>Best Screenplay</li><li>Best Foreign Film</li><li>Best Animated Feature</li><li>Best Score</li><li>Best Song</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2026-12">Early December 2026</time>
+            <span class="checkpoint-estimate">Estimated · Date TBA</span>
+            <h3>Los Angeles Film Critics Association Awards</h3>
+            <span class="checkpoint-points">10–20 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win for Best Film: 20 points</p>
+            <p>Win in the following categories: 10 points</p>
+            <ul><li>Best Director</li><li>Best Lead Performance</li><li>Best Supporting Performance</li><li>Best Screenplay</li><li>Best Animated Feature</li><li>Breakthrough Performance</li><li>Best Directorial Debut</li><li>Best Foreign-Language Film</li><li>Best Documentary</li><li>Best Ensemble</li><li>Outstanding Achievement in Cinematography</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2026-12-07">December 7, 2026</time>
+            <h3>Critics’ Choice Awards Nominations</h3>
+            <span class="checkpoint-points">5–15 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Nomination in the following categories: 15 points</p>
+            <ul><li>Best Picture</li><li>Best Director</li><li>Best Actor</li><li>Best Actress</li><li>Best Supporting Actor</li><li>Best Supporting Actress</li><li>Best Original Screenplay</li><li>Best Adapted Screenplay</li></ul>
+            <p>Nomination in the following categories: 5 points</p>
+            <ul><li>Young Actor/Actress</li><li>Acting Ensemble</li><li>Cinematography</li><li>Editing</li><li>Costume Design</li><li>Production Design</li><li>Score</li><li>Song</li><li>Sound</li><li>Hair/Makeup</li><li>Visual Effects</li><li>Animated Feature</li><li>Comedy Feature</li><li>Foreign-Language Film</li><li>Stunt Design</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2026-12-15">December 15, 2026</time>
+            <h3>Oscar Shortlists</h3>
+            <span class="checkpoint-points">5 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Placement on any Oscar shortlist: 5 points</p>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-01-02">January 2, 2027</time>
+            <h3>National Society of Film Critics Awards</h3>
+            <span class="checkpoint-points">10–20 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win for Best Picture: 20 points</p>
+            <p>Win in the following categories: 10 points</p>
+            <ul><li>Best Director</li><li>Best Actor</li><li>Best Actress</li><li>Best Supporting Actor</li><li>Best Supporting Actress</li><li>Best Screenplay</li><li>Best Cinematography</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-01-03">January 3, 2027</time>
+            <h3>Critics’ Choice Awards</h3>
+            <span class="checkpoint-points">10–25 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win in the following categories: 25 points</p>
+            <ul><li>Best Picture</li><li>Best Director</li><li>Best Actor</li><li>Best Actress</li><li>Best Supporting Actor</li><li>Best Supporting Actress</li><li>Best Original Screenplay</li><li>Best Adapted Screenplay</li></ul>
+            <p>Win in the following categories: 10 points</p>
+            <ul><li>Young Actor/Actress</li><li>Acting Ensemble</li><li>Cinematography</li><li>Editing</li><li>Costume Design</li><li>Production Design</li><li>Score</li><li>Song</li><li>Sound</li><li>Hair/Makeup</li><li>Visual Effects</li><li>Animated Feature</li><li>Comedy Feature</li><li>Foreign-Language Film</li><li>Stunt Design</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-01-06">January 6, 2027</time>
+            <h3>Actor Awards Nominations</h3>
+            <span class="checkpoint-points">5–25 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Nomination in Best Ensemble Cast: 25 points</p>
+            <p>Nomination in the following categories: 20 points</p>
+            <ul><li>Best Male Actor</li><li>Best Female Actor</li><li>Best Supporting Male Actor</li><li>Best Supporting Female Actor</li></ul>
+            <p>Nomination in any other category: 5 points</p>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-01-07">January 7, 2027</time>
+            <h3>Directors Guild Awards Nominations</h3>
+            <span class="checkpoint-points">15 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Nomination in any category: 15 points</p>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-01-08">January 8, 2027</time>
+            <h3>Producers Guild Awards Nominations</h3>
+            <span class="checkpoint-points">15 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Nomination in any category: 15 points</p>
+            <p>(Documentary nominations announced December 11, 2026)</p>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-01-08">January 8, 2027</time>
+            <h3>Writers Guild Awards Nominations</h3>
+            <span class="checkpoint-points">10 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Nomination in any category: 10 points</p>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-01">Early–mid January 2027</time>
+            <span class="checkpoint-estimate">Estimated · Date TBA</span>
+            <h3>AARP Movies for Grownups Awards</h3>
+            <span class="checkpoint-points">10–20 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win for Best Movie for Grownups: 20 points</p>
+            <p>Win in any other category: 10 points</p>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-01-10">January 10, 2027</time>
+            <h3>Golden Globe Awards</h3>
+            <span class="checkpoint-points">25–35 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win in Best Picture: 35 points</p>
+            <p>Win in the following categories: 25 points</p>
+            <ul><li>Cinematic and Box Office Achievement</li><li>Best Director</li><li>Best Actor, Drama</li><li>Best Actress, Drama</li><li>Best Actor, Musical/Comedy</li><li>Best Actress, Musical/Comedy</li><li>Best Supporting Actor</li><li>Best Supporting Actress</li><li>Best Screenplay</li><li>Best Foreign Film</li><li>Best Animated Feature</li><li>Best Score</li><li>Best Song</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-01-19">January 19, 2027</time>
+            <h3>BAFTA Awards Nominations</h3>
+            <span class="checkpoint-points">10–20 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Nomination in the following categories: 20 points</p>
+            <ul><li>Best Picture</li><li>Best Director</li><li>Best Actor</li><li>Best Actress</li><li>Best Supporting Actor</li><li>Best Supporting Actress</li><li>Best Original Screenplay</li><li>Best Adapted Screenplay</li></ul>
+            <p>Nomination in the following categories: 10 points</p>
+            <ul><li>British Film</li><li>British Debut</li><li>Animated Film</li><li>Documentary Film</li><li>Film Not in the English Language</li><li>Casting</li><li>Children’s and Family Film</li><li>Cinematography</li><li>Editing</li><li>Costume Design</li><li>Production Design</li><li>Original Score</li><li>Hair/Makeup</li><li>Special Visual Effects</li><li>Sound</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-01-21">January 21, 2027</time>
+            <h3>Oscar Nominations</h3>
+            <span class="checkpoint-points">15–50 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Nomination in Best Picture: 50 points</p>
+            <p>Nomination in the following categories: 25 points</p>
+            <ul><li>Best Director</li><li>Best Actor</li><li>Best Actress</li><li>Best Supporting Actor</li><li>Best Supporting Actress</li><li>Best Original Screenplay</li><li>Best Adapted Screenplay</li><li>Best Animated Feature</li><li>Best Documentary Feature</li><li>Best International Feature</li></ul>
+            <p>Nomination in the following categories: 15 points</p>
+            <ul><li>Best Cinematography</li><li>Best Costume Design</li><li>Best Production Design</li><li>Best Hair/Makeup</li><li>Best Sound</li><li>Best Visual Effects</li><li>Best Film Editing</li><li>Best Original Song</li><li>Best Original Score</li><li>Best Casting</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-01-30">January 30, 2027</time>
+            <h3>Directors Guild Awards</h3>
+            <span class="checkpoint-points">30 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win in any category: 30 points</p>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-02-13">February 13, 2027</time>
+            <h3>Writers Guild Awards</h3>
+            <span class="checkpoint-points">20 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win in any category: 20 points</p>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-02-21">February 21, 2027</time>
+            <h3>BAFTA Awards</h3>
+            <span class="checkpoint-points">20–35 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win in the following categories: 35 points</p>
+            <ul><li>Best Picture</li><li>Best Director</li><li>Best Actor</li><li>Best Actress</li><li>Best Supporting Actor</li><li>Best Supporting Actress</li><li>Best Original Screenplay</li><li>Best Adapted Screenplay</li></ul>
+            <p>Win in the following categories: 20 points</p>
+            <ul><li>British Film</li><li>British Debut</li><li>Animated Film</li><li>Documentary Film</li><li>Film Not in the English Language</li><li>Casting</li><li>Cinematography</li><li>Editing</li><li>Costume Design</li><li>Production Design</li><li>Original Score</li><li>Hair/Makeup</li><li>Special Visual Effects</li><li>Sound</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-02-27">February 27, 2027</time>
+            <h3>Producers Guild Awards</h3>
+            <span class="checkpoint-points">30 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win in any category: 30 points</p>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-02-28">February 28, 2027</time>
+            <h3>Actor Awards</h3>
+            <span class="checkpoint-points">10–50 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win in Best Ensemble Cast: 50 points</p>
+            <p>Win in the following categories: 35 points</p>
+            <ul><li>Best Male Actor</li><li>Best Female Actor</li><li>Best Supporting Male Actor</li><li>Best Supporting Female Actor</li></ul>
+            <p>Win in any other category: 10 points</p>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-03-06">March 6, 2027</time>
+            <h3>Film Independent Spirit Awards</h3>
+            <span class="checkpoint-points">10–25 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win in the following categories: 25 points</p>
+            <ul><li>Best Feature</li><li>Best Director</li><li>Best Lead Performance</li><li>Best Supporting Performance</li><li>Best Breakthrough Performance</li><li>Best Screenplay</li></ul>
+            <p>Win in the following categories: 10 points</p>
+            <ul><li>First Feature</li><li>First Screenplay</li><li>Documentary Feature</li><li>International Feature</li><li>Cinematography</li><li>Editing</li><li>John Cassavetes Award</li><li>Robert Altman Award</li></ul>
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            <time datetime="2027-03-14">March 14, 2027</time>
+            <h3>The Oscars</h3>
+            <span class="checkpoint-points">50–100 points</span>
+            <span class="checkpoint-prompt">View scoring details</span>
+          </summary>
+          <div class="checkpoint-rules">
+            <p>Win in Best Picture: 100 points</p>
+            <p>Win in the following categories: 75 points</p>
+            <ul><li>Best Director</li><li>Best Actor</li><li>Best Actress</li><li>Best Supporting Actor</li><li>Best Supporting Actress</li><li>Best Original Screenplay</li><li>Best Adapted Screenplay</li><li>Best Animated Feature</li><li>Best Documentary Feature</li><li>Best International Feature</li></ul>
+            <p>Win in the following categories: 50 points</p>
+            <ul><li>Best Cinematography</li><li>Best Costume Design</li><li>Best Production Design</li><li>Best Hair/Makeup</li><li>Best Sound</li><li>Best Visual Effects</li><li>Best Film Editing</li><li>Best Original Song</li><li>Best Original Score</li><li>Best Casting</li></ul>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -205,7 +558,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="script.js?v=20261019-sections"></script>
-  <script src="league-details.js?v=20261019-sections"></script>
+  <script src="script.js?v=20261028-film-pages"></script>
+  <script src="league-details.js?v=20261028-film-pages"></script>
 </body>
 </html>
