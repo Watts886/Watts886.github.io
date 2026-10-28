@@ -471,3 +471,33 @@ footer a { color: var(--gold-bright); text-decoration: none; }
 .movie-pagination button[aria-current="page"] { color: var(--bg); background: var(--gold-bright); border-color: var(--gold-bright); font-weight: 700; }
 .movie-pagination button:hover { border-color: var(--gold-bright); }
 .movie-pagination button:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
+
+/* Team exploration, film details, and league records */
+.team-details > summary { cursor: pointer; list-style: none; }
+.team-details > summary::-webkit-details-marker { display: none; }
+.team-details > summary h3 { margin: .5rem 0; }
+.team-hint { display: block; margin-top: 1rem; color: var(--gold-bright); font-size: .8rem; }
+.team-hint::after { content: ' +'; }
+.team-details[open] > summary .team-hint::after { content: ' −'; }
+.team-content { margin-top: 1.2rem; border-top: 1px solid var(--line); padding-top: .8rem; }
+.team-score { color: var(--gold-bright); font-weight: 700; }
+.film-details { margin-bottom: .6rem; padding: .85rem; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+.film-details > summary { cursor: pointer; line-height: 1.6; overflow-wrap: anywhere; }
+.film-details > summary strong { display: block; color: var(--gold-bright); font-size: .8rem; }
+.detail-content { padding-top: .8rem; color: var(--muted); font-size: .88rem; line-height: 1.7; overflow-wrap: anywhere; }
+.detail-content p { margin: .5rem 0; }
+.detail-content ul { padding-left: 1.2rem; }
+.detail-content a { display: block; color: var(--gold-bright); margin: .7rem 0; }
+.activity-list { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.activity-card { padding: 1.2rem; border: 1px solid var(--line); background: var(--panel); border-radius: 12px; overflow-wrap: anywhere; }
+.activity-card time { color: var(--muted); font-size: .8rem; }
+.activity-card h3 { line-height: 1.4; margin: .7rem 0; }
+.activity-card p { color: var(--muted); line-height: 1.6; }
+.activity-card strong { color: var(--gold-bright); }
+.film-search-label { display: block; margin-bottom: .5rem; color: var(--muted); }
+.film-search { width: 100%; padding: .9rem; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--white); }
+.film-browser { max-height: 650px; overflow-y: auto; padding: .25rem; }
+.movement-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; padding: .7rem 0; border-bottom: 1px solid var(--line); }
+.movement-row strong { color: var(--gold-bright); }
+.team-details summary:focus-visible, .film-details summary:focus-visible, .film-search:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
+.mobile-nav { max-height: calc(100dvh - 68px); overflow-y: auto; }
