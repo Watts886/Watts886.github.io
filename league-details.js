@@ -134,6 +134,8 @@ async function loadLeagueActivity() {
   }
 }
 
+let leagueFilmPage = 1;
+
 function renderLeagueFilmBrowser() {
   const container = document.getElementById('filmDetailsList');
   const open = new Set(Array.from(container.querySelectorAll('details[open] summary span')).map(node=>node.textContent));
@@ -143,8 +145,30 @@ function renderLeagueFilmBrowser() {
   leagueDetails.movies.forEach(movie=>films.set(leagueKey(movie.movie), movie.movie));
   container.replaceChildren();
   const titles = Array.from(films.values()).filter(title=>leagueKey(title).includes(query)).sort((a,b)=>a.localeCompare(b));
-  titles.forEach(title=>{ const panel=leagueFilmPanel(title); panel.open=open.has(title); container.append(panel); });
-  document.getElementById('filmSearchStatus').textContent = `${titles.length} films · Select a film for owners and recorded scoring.`;
+  const pageSize = 10;
+  const pageCount = Math.ceil(titles.length / pageSize);
+  leagueFilmPage = Math.max(1, Math.min(leagueFilmPage, pageCount || 1));
+  const start = (leagueFilmPage - 1) * pageSize;
+  titles.slice(start, start + pageSize).forEach(title=>{ const panel=leagueFilmPanel(title); panel.open=open.has(title); container.append(panel); });
+  const pagination = document.getElementById('filmDetailsPagination');
+  pagination.replaceChildren();
+  pagination.hidden = pageCount <= 1;
+  for (let number = 1; number <= pageCount; number++) {
+    const button = leagueNode('button', String(number));
+    button.type = 'button';
+    button.setAttribute('aria-label', `Page ${number}, films ${(number - 1) * pageSize + 1}–${Math.min(number * pageSize, titles.length)}`);
+    button.setAttribute('aria-controls', 'filmDetailsList');
+    if (number === leagueFilmPage) button.setAttribute('aria-current', 'page');
+    button.addEventListener('click', () => {
+      leagueFilmPage = number;
+      renderLeagueFilmBrowser();
+      pagination.querySelector('[aria-current="page"]').focus();
+    });
+    pagination.append(button);
+  }
+  document.getElementById('filmSearchStatus').textContent = titles.length
+    ? `Showing films ${start + 1}–${Math.min(start + pageSize, titles.length)} of ${titles.length} · Select a film for details.`
+    : 'No films match your search.';
 }
 
 function rankLeagueSnapshot(rows) {
@@ -191,7 +215,10 @@ async function loadLeagueExtras() {
 
 setupLeagueTeams();
 renderLeagueFilmBrowser();
-document.getElementById('filmSearch').addEventListener('input',renderLeagueFilmBrowser);
+document.getElementById('filmSearch').addEventListener('input', () => {
+  leagueFilmPage = 1;
+  renderLeagueFilmBrowser();
+});
 document.addEventListener('league-movies-updated',event=>{leagueDetails.movies=event.detail;renderLeagueTeams();renderLeagueFilmBrowser();});
 document.addEventListener('league-standings-updated',()=>{renderLeagueTeams();renderLeagueMovement();});
 document.addEventListener('league-news-updated',()=>{renderLeagueTeams();renderLeagueFilmBrowser();});
@@ -203,6 +230,7 @@ document.getElementById('movieLeaderboardBody').addEventListener('click', event 
   const link = event.target.closest('[data-film-title]');
   if (!link) return;
   document.getElementById('filmSearch').value = link.dataset.filmTitle;
+  leagueFilmPage = 1;
   renderLeagueFilmBrowser();
   const panel = document.querySelector('#filmDetailsList details');
   if (panel) panel.open = true;
