@@ -26,13 +26,13 @@ const DEV_FEATURES = {
   showRulesSection: true,
 
   // Show or hide the Oscar Night section.
-  showOscarNightSection: true,
+  showOscarNightSection: false,
 
   // Show or hide Bonus Points in the leaderboard.
-  showBonusPointsColumn: true,
+  showBonusPointsColumn: false,
 
   // Show or hide Oscar Night points in the leaderboard.
-  showOscarNightColumn: true,
+  showOscarNightColumn: false,
 
   // Show or hide the Awards Odds section and navigation link.
   showAwardsOddsSection: true
