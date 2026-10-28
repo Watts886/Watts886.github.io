@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261018-pagination">
+  <link rel="stylesheet" href="styles.css?v=20261019-sections">
 </head>
 <body>
   <!-- Mobile-first sticky header. The menu button controls the drawer below. -->
@@ -28,6 +28,9 @@
     <a href="#oscar-news">Oscar News</a>
     <a href="#draft">Drafted Films</a>
     <a href="#movie-standings">Movie Leaderboard</a>
+    <a href="#scoring-activity">Recent Scoring</a>
+    <a href="#film-details">Film Details</a>
+    <a href="#standings-movement">Standings Movement</a>
     <a href="#awards" data-feature-link="awards">Scoring Checkpoints</a>
     <a href="#awards-odds">Awards Odds</a>
     <a href="#oscar-night" data-feature-link="oscarNight">Oscar Night</a>
@@ -58,8 +61,8 @@
     </section>
 
     <section class="quick-stats" aria-label="League statistics">
-      <article><span class="stat-value" id="memberCount">8</span><span class="stat-label">League members</span></article>
-      <article><span class="stat-value" id="filmCount">0</span><span class="stat-label">Films drafted</span></article>
+      <article><span class="stat-value" id="memberCount">11</span><span class="stat-label">League members</span></article>
+      <article><span class="stat-value" id="filmCount">49</span><span class="stat-label">Films drafted</span></article>
       <article><span class="stat-value" id="awardCount">0</span><span class="stat-label">Awards scored</span></article>
       <article data-feature="oscarNight"><span class="stat-value" id="daysToOscar">—</span><span class="stat-label">Days to Oscar night</span></article>
     </section>
@@ -101,14 +104,14 @@
     </section>
 
     <section class="section-shell" id="oscar-news" aria-labelledby="oscarNewsTitle">
-      <div class="section-heading"><p>Stay up to date with</p><h2 id="oscarNewsTitle">Oscar News</h2></div>
+      <div class="section-heading"><p>stay up to date with awards seasons</p><h2 id="oscarNewsTitle">Oscar News</h2></div>
       <p class="status-line" id="newsStatus" role="status">Loading Oscar news…</p>
       <div class="news-grid" id="newsGrid"></div>
     </section>
 
     <section class="section-shell split-section" id="draft">
       <div class="section-heading">
-        <p>Team Film Rosters</p>
+        <p>Team Film Rosters · Select a team to explore</p>
         <h2>Drafted Films</h2>
       </div>
       <div class="card-grid">
@@ -135,6 +138,26 @@
       <nav class="movie-pagination" id="moviePagination" aria-label="Movie leaderboard pages" hidden></nav>
       <p class="status-line" id="moviePageStatus" role="status"></p>
       <p class="status-line" id="movieStatusText" role="status">Connecting to movie data…</p>
+    </section>
+
+    <section class="section-shell" id="scoring-activity" aria-labelledby="scoringActivityTitle">
+      <div class="section-heading"><p>How the points were earned</p><h2 id="scoringActivityTitle">Recent Scoring</h2></div>
+      <p class="status-line" id="scoringActivityStatus" role="status">Loading scoring activity…</p>
+      <div class="activity-list" id="scoringActivityList"></div>
+    </section>
+
+    <section class="section-shell" id="film-details" aria-labelledby="filmDetailsTitle">
+      <div class="section-heading"><p>Explore the draft</p><h2 id="filmDetailsTitle">Film Details</h2></div>
+      <label class="film-search-label" for="filmSearch">Find a film</label>
+      <input class="film-search" id="filmSearch" type="search" placeholder="Search drafted films…" aria-controls="filmDetailsList">
+      <p class="status-line" id="filmSearchStatus" role="status"></p>
+      <div id="filmDetailsList" class="film-browser"></div>
+    </section>
+
+    <section class="section-shell" id="standings-movement" aria-labelledby="standingsMovementTitle">
+      <div class="section-heading"><p>Since the last checkpoint</p><h2 id="standingsMovementTitle">Standings Movement</h2></div>
+      <p class="status-line" id="standingsMovementStatus" role="status">Loading previous standings…</p>
+      <div class="info-panel" id="standingsMovementList"></div>
     </section>
 
     <section class="section-shell" id="awards" data-feature="awards">
@@ -182,6 +205,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="script.js?v=20261018-pagination"></script>
+  <script src="script.js?v=20261019-sections"></script>
+  <script src="league-details.js?v=20261019-sections"></script>
 </body>
 </html>
