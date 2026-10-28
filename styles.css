@@ -190,7 +190,9 @@ button, input, select { font: inherit; }
 .score-player span { display: block; margin-top: .25rem; color: var(--muted); font-size: .68rem; }
 .score-total { color: var(--gold-bright); font-family: Cinzel, serif; font-size: 1.28rem; }
 .desktop-table-wrap { display: none; }
-.status-line { margin: 1rem .3rem 0; color: var(--muted); font-size: .72rem; }
+.status-line { margin: 1rem .3rem 0; padding-bottom: 16px; color: var(--muted); font-size: .72rem; }
+.status-line:empty { margin: 0; padding-bottom: 0; }
+.odds-updated { padding-bottom: 16px; }
 
 .card-grid, .timeline { display: grid; gap: 1rem; }
 .feature-card, .timeline article, .info-panel, .accordion-list details { padding: 1.4rem; background: linear-gradient(145deg, rgba(20,16,12,.94), rgba(8,7,5,.96)); border: 1px solid var(--line); border-radius: 18px; }
@@ -496,8 +498,33 @@ footer a { color: var(--gold-bright); text-decoration: none; }
 .activity-card strong { color: var(--gold-bright); }
 .film-search-label { display: block; margin-bottom: .5rem; color: var(--muted); }
 .film-search { width: 100%; padding: .9rem; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--white); }
-.film-browser { max-height: 650px; overflow-y: auto; padding: .25rem; }
+.film-browser { padding: .25rem; }
+
+/* Recent scoring cards use 75% of the original spacing and type sizes. */
+#scoringActivityList { gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 195px), 1fr)); }
+#scoringActivityList .activity-card { padding: .9rem; border-radius: 9px; font-size: .75rem; }
+#scoringActivityList .activity-card time { font-size: .6rem; }
+#scoringActivityList .activity-card h3 { font-size: .8775rem; margin: .525rem 0; }
+#scoringActivityList .activity-card p { margin: .75em 0; }
 .movement-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; padding: .7rem 0; border-bottom: 1px solid var(--line); }
 .movement-row strong { color: var(--gold-bright); }
 .team-details summary:focus-visible, .film-details summary:focus-visible, .film-search:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
 .mobile-nav { max-height: calc(100dvh - 68px); overflow-y: auto; }
+
+/* Detailed scoring checkpoints; native disclosures support keyboard and touch. */
+.checkpoint-grid { align-items: start; }
+.checkpoint { padding: 1.2rem; background: linear-gradient(145deg, rgba(20,16,12,.94), rgba(8,7,5,.96)); border: 1px solid var(--line); border-radius: 16px; min-width: 0; }
+.checkpoint summary { cursor: pointer; list-style: none; }
+.checkpoint summary::-webkit-details-marker { display: none; }
+.checkpoint summary:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 5px; border-radius: 4px; }
+.checkpoint time { display: block; line-height: 1.7; }
+.checkpoint h3 { font-size: .95rem; line-height: 1.5; overflow-wrap: anywhere; }
+.checkpoint-estimate { display: inline-block; margin-top: .5rem; padding: .25rem .5rem; border: 1px solid var(--line); border-radius: 6px; color: var(--gold-pale); font-size: .68rem; }
+.checkpoint-points { display: block; margin-top: .75rem; color: var(--gold-bright); font-size: .85rem; font-weight: 700; }
+.checkpoint-prompt { display: block; margin-top: .8rem; color: var(--muted); font-size: .75rem; }
+.checkpoint-prompt::after { content: ' +'; }
+.checkpoint[open] .checkpoint-prompt::after { content: ' −'; }
+.checkpoint-rules { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: .83rem; line-height: 1.7; }
+.checkpoint-rules p + p { margin-top: 1rem; }
+.checkpoint-rules ul { margin: .6rem 0 1.2rem; padding-left: 1.1rem; color: var(--muted); }
+.checkpoint-rules a { color: var(--gold-bright); }
