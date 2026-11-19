@@ -528,3 +528,19 @@ footer a { color: var(--gold-bright); text-decoration: none; }
 .checkpoint-rules p + p { margin-top: 1rem; }
 .checkpoint-rules ul { margin: .6rem 0 1.2rem; padding-left: 1.1rem; color: var(--muted); }
 .checkpoint-rules a { color: var(--gold-bright); }
+
+/* Race position graph: checkpoint order on x, first place at the top. */
+.movement-chart-scroll { overflow-x: auto; margin-top: 1.5rem; border-radius: 10px; background: #100d09; }
+.movement-chart-scroll svg { display: block; width: 100%; font-family: Inter, sans-serif; }
+.movement-grid { stroke: rgba(255,255,255,.1); stroke-width: 1; }
+.movement-finish { stroke: var(--gold-bright); stroke-width: 2; stroke-dasharray: 5 5; }
+.movement-axis-label { fill: #c8beb0; font-size: 14px; }
+.movement-axis-title { fill: var(--gold-bright); font-size: 14px; }
+.movement-series { transition: opacity .15s; }
+.movement-series.is-muted { opacity: .12; }
+.movement-series circle:focus { outline: none; stroke: white; stroke-width: 3; r: 7; }
+.movement-controls { display: grid; gap: .5rem; max-width: 22rem; }
+.movement-controls label { color: var(--muted); font-size: .875rem; }
+.movement-player-select { width: 100%; appearance: none; background: #17120d url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%23f4c568' stroke-width='2'/%3E%3C/svg%3E") no-repeat right .85rem center; color: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: .75rem 2.5rem .75rem .85rem; font: inherit; cursor: pointer; }
+.movement-player-select:focus-visible, .movement-chart-scroll:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
+[data-feature="standingsMovement"][hidden], [data-feature-link="standingsMovement"][hidden] { display: none; }
