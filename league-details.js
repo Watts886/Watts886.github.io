@@ -177,25 +177,99 @@ function rankLeagueSnapshot(rows) {
   return ranked.map((row,index)=> { if (!index || row.total!==ranked[index-1].total) rank=index+1; return {...row,rank}; });
 }
 
+function leagueMovementData(snapshots, finalDate) {
+  const dates = [...new Set(snapshots.filter(row => row.date <= finalDate).map(row => row.date))].sort();
+  const checkpoints = dates.map(date => ({date, rows: rankLeagueSnapshot(snapshots.filter(row => row.date === date))}));
+  if (!dates.includes(finalDate)) checkpoints.push({date: finalDate, rows: []});
+  const players = [...new Map(snapshots.filter(row => row.date <= finalDate).map(row => [leagueKey(row.player), row.player])).entries()];
+  return {checkpoints, players};
+}
+
 function renderLeagueMovement() {
-  const container=document.getElementById('standingsMovementList'); container.replaceChildren();
-  const status=document.getElementById('standingsMovementStatus');
-  if (!state.playersAreLive || !leagueDetails.snapshots.length) {
-    status.textContent='Standings movement will appear when live standings and a previous checkpoint are available.'; return;
+  const container = document.getElementById('standingsMovementList');
+  container.replaceChildren();
+  const status = document.getElementById('standingsMovementStatus');
+  const finalDate = CONFIG.oscarNightDate.slice(0, 10);
+  const {checkpoints, players} = leagueMovementData(leagueDetails.snapshots, finalDate);
+  if (!players.length) {
+    status.textContent = 'The position graph will appear when scoring checkpoints are saved in Standings History.';
+    return;
   }
-  const today=new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'});
-  const dates=[...new Set(leagueDetails.snapshots.map(row=>row.date).filter(date=>date<today))].sort().reverse();
-  if (!dates.length) { status.textContent='Add a checkpoint dated before today to compare standings.'; return; }
-  const prior=rankLeagueSnapshot(leagueDetails.snapshots.filter(row=>row.date===dates[0]));
-  const current=rankLeagueSnapshot(state.players.map(row=>({player:row.player,total:totalFor(row)})));
-  current.forEach(row=>{
-    const before=prior.find(previous=>leagueKey(previous.player)===leagueKey(row.player));
-    const delta=before ? before.rank-row.rank : null;
-    const text=delta===null?'No previous record':delta>0?`↑ Up ${delta}`:delta<0?`↓ Down ${-delta}`:'— No change';
-    const item=leagueNode('p',undefined,'movement-row');
-    item.append(leagueNode('span',`${row.rank}. ${row.player}`),leagueNode('strong',text)); container.append(item);
+  const colors = ['#f4c568','#68c9ff','#fa8fa6','#80dfac','#c3a1ff','#ff9b58','#56d9d0','#d1db72','#a5baff','#e9a5dc','#cad5df'];
+  const width = Math.max(850, checkpoints.length * 100 + 220);
+  const height = Math.max(420, players.length * 34 + 160);
+  const left = 65, right = width - 155, top = 45, bottom = height - 110;
+  const maxRank = Math.max(players.length, ...checkpoints.flatMap(point => point.rows.map(row => row.rank)));
+  const x = index => left + index * (right - left) / Math.max(1, checkpoints.length - 1);
+  const y = rank => top + (rank - 1) * (bottom - top) / Math.max(1, maxRank - 1);
+  const svgNode = (tag, attrs = {}, text) => {
+    const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+    if (text !== undefined) node.textContent = text;
+    return node;
+  };
+  const scroll = leagueNode('div', undefined, 'movement-chart-scroll');
+  scroll.tabIndex = 0;
+  scroll.setAttribute('role', 'region');
+  scroll.setAttribute('aria-label', 'Standings position graph. Scroll horizontally to see all checkpoints.');
+  const svg = svgNode('svg', {viewBox: '0 0 ' + width + ' ' + height, style: 'min-width:' + width + 'px', role:'group', 'aria-label':'Player ranks by scoring checkpoint, first place at the top'});
+  svg.append(svgNode('text', {x: 12, y: 22, class:'movement-axis-title'}, 'Position'));
+  for (let rank = 1; rank <= maxRank; rank++) {
+    svg.append(svgNode('line', {x1:left, x2:right, y1:y(rank), y2:y(rank), class:'movement-grid'}));
+    svg.append(svgNode('text', {x:left - 18, y:y(rank) + 5, 'text-anchor':'end', class:'movement-axis-label'}, rank));
+  }
+  checkpoints.forEach((point, index) => {
+    const isFinal = point.date === finalDate;
+    svg.append(svgNode('line', {x1:x(index), x2:x(index), y1:top, y2:bottom, class:isFinal ? 'movement-finish' : 'movement-grid'}));
+    const label = svgNode('text', {x:x(index), y:bottom + 28, transform:'rotate(35 ' + x(index) + ' ' + (bottom + 28) + ')', class:'movement-axis-label'});
+    label.textContent = isFinal ? 'Oscar Night' : (index === 0 ? 'First · ' : '') + point.date.slice(5);
+    label.append(svgNode('title', {}, point.date)); svg.append(label);
   });
-  status.textContent=`Compared with checkpoint ${dates[0]}.`;
+  const controls = leagueNode('div', undefined, 'movement-controls');
+  const label = leagueNode('label', 'Highlight player');
+  label.htmlFor = 'movementPlayerSelect';
+  const select = leagueNode('select', undefined, 'movement-player-select');
+  select.id = 'movementPlayerSelect';
+  const all = leagueNode('option', 'All players'); all.value = '';
+  select.append(all);
+  controls.append(label, select);
+  const groups = [];
+  players.forEach(([key, name], playerIndex) => {
+    const color = colors[playerIndex % colors.length];
+    const group = svgNode('g', {class:'movement-series'});
+    let segment = [];
+    const flush = () => {
+      if (segment.length > 1) group.append(svgNode('polyline', {points:segment.join(' '), fill:'none', stroke:color, 'stroke-width':3, 'stroke-linejoin':'round'}));
+      segment = [];
+    };
+    checkpoints.forEach((point, index) => {
+      const row = point.rows.find(row => leagueKey(row.player) === key);
+      if (!row) { flush(); return; }
+      segment.push(x(index) + ',' + y(row.rank));
+    });
+    flush();
+    checkpoints.forEach((point, index) => {
+      const row = point.rows.find(row => leagueKey(row.player) === key);
+      if (!row) return;
+      const description = name + ' · ' + point.date + ' · Position ' + row.rank + ' · ' + row.total.toLocaleString() + ' points';
+      const dot = svgNode('circle', {cx:x(index), cy:y(row.rank), r:5, fill:color, stroke:'#100d09', 'stroke-width':2, tabindex:0, role:'img', 'aria-label':description});
+      dot.append(svgNode('title', {}, description));
+      dot.addEventListener('focus', () => {status.textContent = description;});
+      dot.addEventListener('mouseenter', () => {status.textContent = description;});
+      group.append(dot);
+    });
+    svg.append(group); groups.push(group);
+    const option = leagueNode('option', name);
+    option.value = String(playerIndex);
+    select.append(option);
+  });
+  select.addEventListener('change', () => {
+    const selected = select.value === '' ? null : Number(select.value);
+    groups.forEach((group, index) => group.classList.toggle('is-muted', selected !== null && index !== selected));
+    if (selected !== null) svg.append(groups[selected]);
+  });
+  scroll.append(svg); container.append(controls, scroll);
+  status.textContent = 'Each dot is a saved scoring update. Select a player to highlight their line; focus or hover a dot for rank and points. Unrecorded checkpoints remain blank.';
 }
 
 async function loadLeagueExtras() {
