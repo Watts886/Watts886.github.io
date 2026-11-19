@@ -25,6 +25,9 @@ const DEV_FEATURES = {
   // Show or hide the Rules section.
   showRulesSection: true,
 
+  // Show or hide Standings Movement and its navigation link.
+  showStandingsMovementSection: false,
+
   // Show or hide the Oscar Night section.
   showOscarNightSection: false,
 
@@ -594,6 +597,9 @@ function sortedPlayers() {
 ****************************************************************/
 
 function applyFeatureToggles() {
+
+  document.querySelectorAll('[data-feature="standingsMovement"], [data-feature-link="standingsMovement"]')
+    .forEach(el => el.hidden = !DEV_FEATURES.showStandingsMovementSection);
 
   // Awards section.
   document
