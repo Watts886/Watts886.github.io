@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261028-checkpoints">
+  <link rel="stylesheet" href="styles.css?v=20261118-movement-dropdown">
 </head>
 <body>
   <!-- Mobile-first sticky header. The menu button controls the drawer below. -->
@@ -30,7 +30,7 @@
     <a href="#movie-standings">Movie Leaderboard</a>
     <a href="#scoring-activity">Recent Scoring</a>
     <a href="#film-details">Film Details</a>
-    <a href="#standings-movement">Standings Movement</a>
+    <a href="#standings-movement" data-feature-link="standingsMovement">Standings Movement</a>
     <a href="#awards" data-feature-link="awards">Scoring Checkpoints</a>
     <a href="#awards-odds">Awards Odds</a>
     <a href="#oscar-night" data-feature-link="oscarNight">Oscar Night</a>
@@ -155,9 +155,9 @@
       <nav class="movie-pagination" id="filmDetailsPagination" aria-label="Film details pages" hidden></nav>
     </section>
 
-    <section class="section-shell" id="standings-movement" aria-labelledby="standingsMovementTitle">
-      <div class="section-heading"><p>Since the last checkpoint</p><h2 id="standingsMovementTitle">Standings Movement</h2></div>
-      <p class="status-line" id="standingsMovementStatus" role="status">Loading previous standings…</p>
+    <section class="section-shell" id="standings-movement" data-feature="standingsMovement" aria-labelledby="standingsMovementTitle">
+      <div class="section-heading"><p>The race to Oscar Night</p><h2 id="standingsMovementTitle">Standings Movement</h2></div>
+      <p class="status-line" id="standingsMovementStatus" role="status">Loading scoring checkpoints…</p>
       <div class="info-panel" id="standingsMovementList"></div>
     </section>
 
@@ -558,7 +558,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="script.js?v=20261028-film-pages"></script>
-  <script src="league-details.js?v=20261028-film-pages"></script>
+  <script src="script.js?v=20261118-movement-toggle"></script>
+  <script src="league-details.js?v=20261118-position-graph"></script>
 </body>
 </html>
